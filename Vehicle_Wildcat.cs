@@ -156,7 +156,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	destroyedLevel = 200.00;
 	
 	rechargeRate = 10 / 31.25;
-	maxEnergy = 200;
+	maxEnergy = 100;
 	energyShield = 1.0;
 	energyShape = Turret_EnergyShieldShape;
 	energyScale = 3;
@@ -275,7 +275,6 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	autoAngularForce = 2200;
 	autoLinearForce = 30;
 
-	maxEnergy = 100;
 	jetForce = 3000;
 	minJetEnergy = 0;
 	jetEnergyDrain = 0;
