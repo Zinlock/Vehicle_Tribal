@@ -152,10 +152,10 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	cameraTilt = 0;
 	cameraRoll = true;
 
-	maxDamage = 300.00;
-	destroyedLevel = 300.00;
+	maxDamage = 200.00;
+	destroyedLevel = 200.00;
 	
-	rechargeRate = 15 / 31.25;
+	rechargeRate = 10 / 31.25;
 	maxEnergy = 200;
 	energyShield = 1.0;
 	energyShape = Turret_EnergyShieldShape;
@@ -163,6 +163,10 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	energyDelay = 3;
 	energySound = Turret_ShieldDamagedSound;
 	energyBreakSound = Turret_ShieldDestroyedSound;
+
+	useVehiclePrints = true;
+	useEnergyPrints = true;
+	useHeatPrints = false;
 
 	maxSteeringAngle = $pi/4;
 	integration = 8;
@@ -217,7 +221,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	minImpactSpeed = 25;
 	minImpactDamage = 20;
 	maxImpactSpeed = 90;
-	maxImpactDamage = 400;
+	maxImpactDamage = 300;
 
 	groundImpactMinSpeed = 10.0;
 	speedDamageScale = 0.010;
