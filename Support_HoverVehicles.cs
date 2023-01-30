@@ -50,6 +50,9 @@ function FlyingVehicle::hoverLoop(%obj)
 	%pos = vectorAdd(%obj.getPosition(), vectorScale(%obj.getUpVector(), getWord(%db.massCenter, 2)));
 	%end = VectorAdd(%pos, "0 0 -256");
 
+	if(%vel $= "0 0 0")
+		%obj.setVelocity("0 0 0.1");
+
 	%ray = containerRayCast(%pos, %end, $HoverMask);
 
 	%hit = %end;
