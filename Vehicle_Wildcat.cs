@@ -171,7 +171,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	maxSteeringAngle = $pi/4;
 	integration = 8;
 
-	massBox = "2 4 2";
+	massBox = "0 0 0";
 	massCenter = "0 0 -0.6"; // must be centered for hover vehicles
 
 	mass = 200;
@@ -199,16 +199,29 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	splashEmitter[2] = vehicleBubbleEmitter;
 
 	softSplashSoundVelocity = 5.0;
-	mediumSplashSoundVelocity = 20.0;
-	hardSplashSoundVelocity = 40.0;
+	mediumSplashSoundVelocity = 30.0;
+	hardSplashSoundVelocity = 60.0;
 	exitSplashSoundVelocity = 5.0;
 
 	// sounds:
-	// exitingWater;
-	// impactWaterEasy;
-	// impactWaterMedium;
-	// impactWaterHard;
-	// waterWakeSound;
+	exitingWater = T2VehicleSplashExitSound;
+	impactWaterEasy = T2VehicleSplashLightSound;
+	impactWaterMedium = T2VehicleSplashMediumSound;
+	impactWaterHard = T2VehicleSplashHeavySound;
+	// waterWakeSound; // ? might be the sound for hovering over water
+
+	// todo: test these:
+	// ParticleEmitterDataPtr forwardJetEmitter;
+  // ParticleEmitterDataPtr backwardJetEmitter;
+  // ParticleEmitterDataPtr downJetEmitter;
+  // ParticleEmitterDataPtr trailEmitter;
+  // float minTrailSpeed;
+	// ParticleEmitterDataPtr dustEmitter;
+	// float triggerDustHeight;
+	// float dustHeight;
+
+	// todo: make tan the default color, but let the vehicle be recolored
+	// paintable = true;
 
 	bodyFriction = 0.6;
 	bodyRestitution = 0.6;
@@ -225,15 +238,10 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 
 	groundImpactMinSpeed = 10.0;
 	speedDamageScale = 0.010;
-
-	// engineTorque = 25000;
-	// engineBrake = 2000;
-	// brakeTorque = 50000;
-	// maxWheelSpeed = 25;
 	
 	damageEmitter[0] = T2VehicleDamageEmitter;
 	damageEmitterOffset[0] = "0.0 -0.5 0.5 ";
-	damageLevelTolerance[0] = 0.80;
+	damageLevelTolerance[0] = 0.65;
 
 	damageEmitter[1] = T2VehicleExplosionShrapnelEmitter;
 	damageEmitterOffset[1] = "0.0 -0.5 0.5 ";
@@ -244,7 +252,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	initialExplosionProjectile = T2VehicleInitialExplosionProjectile;
 	initialExplosionOffset = 0;
 
-	burnTime = 200;
+	burnTime = 32;
 
 	finalExplosionProjectile = T2WildcatFinalExplosionProjectile;
 	finalExplosionOffset = 0;

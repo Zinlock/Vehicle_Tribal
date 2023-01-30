@@ -14,6 +14,34 @@ datablock AudioProfile(T2VehicleImpactHardSound)
 	preload = true;
 };
 
+datablock AudioProfile(T2VehicleSplashLightSound)
+{
+	filename    = "./wav/splash_light.wav";
+	description = AudioClose3d;
+	preload = true;
+};
+
+datablock AudioProfile(T2VehicleSplashMediumSound)
+{
+	filename    = "./wav/splash_medium.wav";
+	description = AudioClose3d;
+	preload = true;
+};
+
+datablock AudioProfile(T2VehicleSplashHeavySound)
+{
+	filename    = "./wav/splash_heavy.wav";
+	description = AudioClose3d;
+	preload = true;
+};
+
+datablock AudioProfile(T2VehicleSplashExitSound)
+{
+	filename    = "./wav/splash_exit.wav";
+	description = AudioClose3d;
+	preload = true;
+};
+
 datablock AudioProfile(T2VehicleDestroySound)
 {
 	filename    = "./wav/vehicle_explosion.wav";
