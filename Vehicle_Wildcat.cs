@@ -164,7 +164,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	energySound = Turret_ShieldDamagedSound;
 	energyBreakSound = Turret_ShieldDestroyedSound;
 
-	useVehiclePrints = true;
+	useVehiclePrints[0] = true;
 	useEnergyPrints = true;
 	useHeatPrints = false;
 

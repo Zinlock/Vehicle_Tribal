@@ -8,7 +8,7 @@ package T2VehiclePrint
 		Parent::onMount(%db, %pl, %col, %node);
 
 		if(isObject(%pl))
-			%pl.vehiclePrintLoop();
+			%pl.vehiclePrintLoop(%node);
 	}
 };
 activatePackage(T2VehiclePrint);
@@ -82,9 +82,9 @@ function comp2hex( %comp )
     return %left @ %comp;
 }
 
-function AIPlayer::vehiclePrintLoop(%pl) {}
+function AIPlayer::vehiclePrintLoop(%pl, %node) {}
 
-function Player::vehiclePrintLoop(%pl)
+function Player::vehiclePrintLoop(%pl, %node)
 {
 	cancel(%pl.vehiclePrint);
 
@@ -98,7 +98,7 @@ function Player::vehiclePrintLoop(%pl)
 
 	%db = %obj.getDataBlock();
 
-	if(!%db.useVehiclePrints)
+	if(!%db.useVehiclePrints[%node])
 		return;
 	
 	%cl = %pl.Client;
@@ -138,7 +138,7 @@ function Player::vehiclePrintLoop(%pl)
 		%hstr = "<just:right><color:" @ %htcol @ "><font:arial:16>" @ mCeil(%erg * 100) @ "% <spush>HEAT";
 	}
 
-	%cl.bottomPrint(%str @ %estr @ %hstr, 1);
+	commandToClient(%cl, 'bottomPrint', %str @ %estr @ %hstr, 1, 1);
 
-	%pl.vehiclePrint = %pl.schedule(100, vehiclePrintLoop);
+	%pl.vehiclePrint = %pl.schedule(100, vehiclePrintLoop, %node);
 }
