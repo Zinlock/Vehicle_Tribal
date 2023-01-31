@@ -126,17 +126,8 @@ function Player::vehiclePrintLoop(%pl, %node)
 		%estr = "<just:left>ERG <color:" @ %ecol @ "><font:arial:16>" @ mCeil(%erg * 100) @ "%";
 	}
 	
-	if(%db.useHeatPrints)
-	{
-		%htcolMax = hex2rgba("4499FF");
-		%htcolMin = hex2rgba("FF44EE");
-
-		%ht = %obj.gunHeat / %db.maxGunHeat;
-
-		%htcol = rgb2hex(RGBLerp(%htcolMax, %htcolMin, %ht));
-
-		%hstr = "<just:right><color:" @ %htcol @ "><font:arial:16>" @ mCeil(%erg * 100) @ "% <spush>HEAT";
-	}
+	if(%obj.useExtraPrints)
+		%hstr = "<just:right><color:" @ stripMLControlChars(%obj.extraPrintColor) @ "><font:arial:16>" @ stripMLControlChars(%obj.extraPrintText) @ " <spush>" @ stripMLControlChars(%obj.extraPrintLabel);
 
 	commandToClient(%cl, 'bottomPrint', %str @ %estr @ %hstr, 1, 1);
 

@@ -28,7 +28,6 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 
 	useVehiclePrints[0] = true;
 	useEnergyPrints = true;
-	useHeatPrints = false;
 
 	maxSteeringAngle = $pi/4;
 	integration = 8;
@@ -120,6 +119,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	// jetSound = hammerHitSound;
 
 	useEngineSounds = true;
+	engineSlot = 0;
 	engineIdleSound = T2WildcatIdleSound;
 	engineMoveSound = T2WildcatEngineSound;
 	engineMoveSpeed = 25;

@@ -75,10 +75,10 @@ function WheeledVehicle::engineLoop(%obj)
 		if(%obj.engineLevel != 0)
 		{
 			%obj.engineLevel = 0;
-			%obj.stopAudio(0);
+			%obj.stopAudio(%db.engineSlot);
 			
 			if(isObject(%db.engineIdleSound))
-				%obj.playAudio(0, %db.engineIdleSound);
+				%obj.playAudio(%db.engineSlot, %db.engineIdleSound);
 			
 			%db.onEngineLowSpeed(%obj);
 		}
@@ -88,10 +88,10 @@ function WheeledVehicle::engineLoop(%obj)
 		if(%obj.engineLevel != 1)
 		{
 			%obj.engineLevel = 1;
-			%obj.stopAudio(0);
+			%obj.stopAudio(%db.engineSlot);
 			
 			if(isObject(%db.engineMoveSound))
-				%obj.playAudio(0, %db.engineMoveSound);
+				%obj.playAudio(%db.engineSlot, %db.engineMoveSound);
 			
 			%db.onEngineMedSpeed(%obj);
 		}
@@ -101,10 +101,10 @@ function WheeledVehicle::engineLoop(%obj)
 		if(%obj.engineLevel != 2)
 		{
 			%obj.engineLevel = 2;
-			%obj.stopAudio(0);
+			%obj.stopAudio(%db.engineSlot);
 			
 			if(isObject(%db.engineBoostSound))
-				%obj.playAudio(0, %db.engineBoostSound);
+				%obj.playAudio(%db.engineSlot, %db.engineBoostSound);
 
 			%db.onEngineHighSpeed(%obj);
 		}
