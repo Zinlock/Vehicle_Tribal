@@ -126,7 +126,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	engineBoostSound = T2WildcatEngineFastSound;
 	engineBoostSpeed = 60;
 	
-	rollForce		= 20;
+	rollForce		= -10;
 	rotationalDrag		= 15;
 
 	maxAutoSpeed = 300;
@@ -139,7 +139,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	jetEnergyDrain = 0;
 
 	steeringForce = 4500;
-	steeringRollForce = 0;
+	steeringRollForce = 500;
 	
 	maneuveringForce = 5000;
 	horizontalSurfaceForce = 20;
