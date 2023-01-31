@@ -147,6 +147,9 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 {
 	shapeFile = "./dts/wildcat.dts";
 
+	defaultColor = "0.609 0.539 0.406";
+	paintable = true;
+
 	cameraMaxDist = 8.5;
 	cameraOffset = 3;
 	cameraTilt = 0;
@@ -219,9 +222,6 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	// ParticleEmitterDataPtr dustEmitter;
 	// float triggerDustHeight;
 	// float dustHeight;
-
-	// todo: make tan the default color, but let the vehicle be recolored
-	// paintable = true;
 
 	bodyFriction = 0.6;
 	bodyRestitution = 0.6;

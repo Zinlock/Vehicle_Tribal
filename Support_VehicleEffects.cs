@@ -15,6 +15,14 @@ package T2VehicleEffects
 			%obj.engineLevel = -1;
 			%obj.engineLoop();
 		}
+
+		if(%db.defaultColor !$= "")
+		{
+			%obj.color = setWord(%db.defaultColor, 3, "1");
+			
+			if(!isObject(%obj.spawnBrick))
+				%obj.setNodeColor("ALL", %obj.color);
+		}
 	}
 	
 	function WheeledVehicleData::onAdd(%db, %obj)
@@ -25,6 +33,25 @@ package T2VehicleEffects
 		{
 			%obj.engineLevel = -1;
 			%obj.engineLoop();
+		}
+		
+		if(%db.defaultColor !$= "")
+		{
+			%obj.color = setWord(%db.defaultColor, 3, "1");
+
+			if(!isObject(%obj.spawnBrick))
+				%obj.setNodeColor("ALL", %obj.color);
+		}
+	}
+
+	function FxDtsBrick::unColorVehicle(%brk)
+	{
+		Parent::unColorVehicle(%brk);
+
+		if(isObject(%veh = %brk.vehicle) && (%db = %veh.getDataBlock()).defaultColor !$= "")
+		{
+			%veh.color = setWord(%db.defaultColor, 3, "1");
+			%veh.setNodeColor("ALL", %veh.color);
 		}
 	}
 };
