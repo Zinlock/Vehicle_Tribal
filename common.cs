@@ -556,3 +556,137 @@ datablock ParticleEmitterData(T2VehicleDamageEmitter)
 	overrideAdvance = true;
 	particles = "T2VehicleDamageParticle";
 };
+
+
+// -- SUPPORT FUNCTIONS --
+
+function RaycastFire(%db, %start, %dir, %spd, %amt, %srcSlot, %srcObj, %srcCli, %srcImg, %range)
+{
+	%spread = %spd / 1000;
+	%shellcount = %amt;
+
+	%shells = -1;
+	
+	%dir = vectorNormalize(%dir);
+
+	for(%shell=0; %shell<%shellcount; %shell++)
+	{
+		%velocity = VectorScale(%dir, 200);
+		%x = (getRandom() - 0.5) * 10 * 3.1415926 * %spread;
+		%y = (getRandom() - 0.5) * 10 * 3.1415926 * %spread;
+		%z = (getRandom() - 0.5) * 10 * 3.1415926 * %spread;
+		%mat = MatrixCreateFromEuler(%x @ " " @ %y @ " " @ %z);
+		%vel = vectorNormalize(MatrixMulVector(%mat, %velocity));
+
+		%end = vectorAdd(%start, vectorScale(%vel, %range));
+		%mask = $TypeMasks::FxBrickObjectType |
+						$TypeMasks::PlayerObjectType |
+						$TypeMasks::VehicleObjectType |
+						$TypeMasks::TerrainObjectType |
+						$TypeMasks::StaticObjectType;
+		%start = vectorAdd(%start, vectorScale(%vel, -%range/1000));
+
+		%dist = vectorDist(%start, %end);
+		%int = 100;
+		%cts = mFloor(%dist / %int);
+
+		for(%i = 0; %i < %cts; %i++)
+		{
+			%point = vectorAdd(%start, vectorScale(%vel, %int * %i));
+			%ray = containerRayCast(%point, vectorAdd(%point, vectorScale(%vel, %int)), %mask, %srcObj, %srcObj.getObjectMount());
+			%col = getWord(%ray, 0);
+
+			if(!isObject(%col))
+				%pos = %end;
+			else
+			{
+				%pos = getWords(%ray, 1, 3);
+			
+				%realProjectile = new Projectile()
+				{
+					datablock = %db;
+					initialPosition = vectorAdd(%pos, vectorScale(%vel, -0.1));
+					initialVelocity = vectorScale(%vel, 200);
+					client = %srcCli;
+					sourceObject = %srcObj;
+					minigame = %srcCli.minigame;
+					sourceSlot = %srcSlot;
+					scale = %srcImg.projectileScale;
+				};
+
+				%shells = %shells TAB %realProjectile;
+
+				%realProjectile.dontHurtShooter = true;
+				break;
+			}
+		}
+
+		if(%srcImg.tracerSize != 0)
+		{
+			%shape = new StaticShape()
+			{
+				datablock = %srcImg.tracerData;
+			};
+			MissionCleanup.add(%shape);
+
+			if(%srcImg.tracerSize > 0)
+			{
+				%x = getWord(%vel,0) / 2;
+				%y = (getWord(%vel,1) + 1) / 2;
+				%z = getWord(%vel,2) / 2;
+
+				%shape.setTransform(%start SPC VectorNormalize(%x SPC %y SPC %z) SPC mDegToRad(180));
+			}
+			else
+			{
+				%x = (-1*getWord(%vel,0)) / 2;
+				%y = ((-1*getWord(%vel,1)) + 1) / 2;
+				%z = (-1*getWord(%vel,2)) / 2;
+
+				%shape.setTransform(%pos SPC VectorNormalize(%x SPC %y SPC %z) SPC mDegToRad(180));
+			}
+			
+			%shape.setScale(mAbs(%srcImg.tracerSize) SPC vectorDist(%start,%pos) SPC mAbs(%srcImg.tracerSize));
+		}
+	}
+
+	return removeField(%shells, 0);
+}
+
+function ProjectileFire(%db, %pos, %vec, %spd, %amt, %srcSlot, %srcObj, %srcCli, %vel)
+{	
+	%projectile = %db;
+	%spread = %spd / 1000;
+	%shellcount = %amt;
+
+	if(%vel $= "")
+		%vel = %projectile.muzzleVelocity;
+
+	%shells = -1;
+
+	for(%shell=0; %shell<%shellcount; %shell++)
+	{
+		%velocity = VectorScale(%vec, %vel);
+		%x = (getRandom() - 0.5) * 10 * 3.1415926 * %spread;
+		%y = (getRandom() - 0.5) * 10 * 3.1415926 * %spread;
+		%z = (getRandom() - 0.5) * 10 * 3.1415926 * %spread;
+		%mat = MatrixCreateFromEuler(%x @ " " @ %y @ " " @ %z);
+		%velocity = MatrixMulVector(%mat, %velocity);
+
+		%p = new Projectile()
+		{
+			dataBlock = %projectile;
+			initialVelocity = %velocity;
+			initialPosition = %pos;
+			sourceObject = %srcObj;
+			sourceSlot = %srcSlot;
+			sourceInv = %srcObj.currTool;
+			client = %srcCli;
+		};
+		MissionCleanup.add(%p);
+
+		%shells = %shells TAB %p;
+	}
+
+	return removeField(%shells, 0);
+}
