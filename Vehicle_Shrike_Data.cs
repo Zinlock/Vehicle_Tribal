@@ -67,43 +67,6 @@ datablock ParticleEmitterData(T2ShrikeBlasterImpactEmitter)
 	particles = "T2ShrikeBlasterImpactParticle";
 };
 
-datablock ParticleData(T2ShrikeBlasterTrailParticle)
-{
-	windCoefficient      = 0.5;
-	dragCoefficient      = 1;
-	gravityCoefficient   = 0;
-	inheritedVelFactor   = 0;
-	constantAcceleration = 0;
-	lifetimeMS           = 250;
-	lifetimeVarianceMS   = 50;
-	textureName          = "base/data/particles/dot";
-	spinSpeed		= 0.0;
-	spinRandomMin		= 0.0;
-	spinRandomMax		= 0.0;
-	colors[0]     = "0.0 0.6 1.0 0.9";
-	colors[1]     = "0.0 0.0 0.0 0.0";
-	sizes[0]      = 0.5;
-	sizes[1]      = 0;
-
-	useInvAlpha = false;
-};
-
-datablock ParticleEmitterData(T2ShrikeBlasterTrailEmitter)
-{
-	ejectionPeriodMS = 1;
-	periodVarianceMS = 0;
-	ejectionVelocity = 5;
-	velocityVariance = 0.0;
-	ejectionOffset   = 0.0;
-	thetaMin         = 0;
-	thetaMax         = 0;
-	phiReferenceVel  = 0;
-	phiVariance      = 360;
-	overrideAdvance = false;
-
-	particles = "T2ShrikeBlasterTrailParticle";
-};
-
 // -- WEAPON --
 
 datablock ExplosionData(T2ShrikeBlasterExplosion : gunExplosion)
@@ -117,7 +80,7 @@ datablock ExplosionData(T2ShrikeBlasterExplosion : gunExplosion)
 	particleRadius = 0.0;
 
 	damageRadius = 6;
-	radiusDamage = 40;
+	radiusDamage = 50;
 };
 
 datablock ProjectileData(T2ShrikeBlasterProjectile)
@@ -137,7 +100,7 @@ datablock ProjectileData(T2ShrikeBlasterProjectile)
 	impactImpulse	     = 400;
 	verticalImpulse	   = 400;
 	explosion = T2ShrikeBlasterExplosion;
-	particleEmitter     = T2ShrikeBlasterTrailEmitter;
+	particleEmitter     = "";
 
 	muzzleVelocity      = 200;
 	velInheritFactor    = 0;
@@ -184,8 +147,11 @@ datablock ShapeBaseImageData(T2ShrikeBlasterAImage)
 	tracerSize = -3; // negative value flips the tracer
 	tracerData = T2ShrikeBlasterTracer;
 
+	energyDrain = 8;
+	minEnergy = 15;
+
 	stateName[0]                    = "Ready";
-	stateTransitionOnNotLoaded[0]      = "AmmoCheck"; // using loaded instead of trigger because vehicle image triggers cant be held for some reason
+	stateTransitionOnNotLoaded[0]   = "AmmoCheck"; // using loaded instead of trigger because vehicle image triggers cant be held for some reason
 	stateTimeoutValue[0]            = 0.1;            // NotLoaded is trigger down, not the other way around
 	stateTransitionOnTimeout[0]     = "Ready";
 	stateScript[0]                  = "onReadyLoop";
@@ -224,6 +190,7 @@ function T2ShrikeBlasterAImage::onFire(%img, %obj, %slot)
 {
 	if(isObject(%pl = %obj.getControllingObject()) || isObject(%pl = %obj.lastMountedPlayer))
 	{
+		%obj.setEnergyLevel(%obj.getEnergyLevel() - %img.energyDrain);
 		%obj.stopAudio(0);
 		%obj.playAudio(0, T2ShrikeFireSound);
 
@@ -241,9 +208,13 @@ function T2ShrikeBlasterAImage::onDelay(%img, %obj, %slot)
 
 function T2ShrikeBlasterAImage::onAmmoCheck(%img, %obj, %slot)
 {
-	// todo
-
-	%obj.setImageAmmo(%slot, 1);
+	if(%obj.getEnergyLevel() > %img.minEnergy)
+		%obj.setImageAmmo(%slot, 1);
+	else
+	{
+		%obj.setImageAmmo(%slot, 0);
+		%obj.setImageLoaded(1, 1);
+	}
 }
 
 datablock ShapeBaseImageData(T2ShrikeBlasterBImage : T2ShrikeBlasterAImage)
