@@ -13,6 +13,10 @@ if(!isFunction(Armor, onUnMount))
 if(!isFunction(Armor, onTrigger))
 	eval("function Armor::onTrigger(%db, %pl, %trig, %val) { }");
 
+// todo: add support for aiplayer based guns
+// todo: make aiplayer guns redirect damage to the vehicle
+// todo: make it so vehicle mountpoints can control ai guns
+
 package T2VehicleGuns
 {
 	function FlyingVehicleData::onAdd(%db, %obj)
@@ -60,12 +64,32 @@ package T2VehicleGuns
 		{
 			if(%obj.getControllingObject() == %pl)
 			{
-				%obj.setImageLoaded(0, !%val);
+				%odb = %obj.getDataBlock();
+
+				if(%odb.gunTriggerLoad[%obj.currSlot])
+					%obj.setImageLoaded(%odb.gunTriggerSlot[%obj.currSlot], !%val);
+				else
+					%obj.setImageTrigger(%odb.gunTriggerSlot[%obj.currSlot], %val);
+
 				return;
 			}
 		}
 
 		Parent::onTrigger(%db, %pl, %trig, %val);
+	}
+
+	function serverCmdUnUseTool(%cl)
+	{
+		%pl = %cl.Player;
+
+		if(isObject(%pl) && %pl.isMounted() && %pl.usingVehicleGuns)
+		{
+			commandToClient(%cl, 'SetActiveTool', %pl.getObjectMount().currSlot);
+			%pl.schedule(0, unMountImage, 0);
+			%pl.schedule(0, playThread, 1, root);
+		}
+		else
+			Parent::serverCmdUnUseTool(%cl);
 	}
 
 	function serverCmdUseTool(%cl, %idx)

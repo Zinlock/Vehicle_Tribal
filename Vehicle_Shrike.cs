@@ -18,6 +18,9 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	gunImage[0, 0] = T2ShrikeBlasterAImage;
 	gunImage[0, 1] = T2ShrikeBlasterBImage;
 	gunItem[0] = -1; // item to use as icon
+	gunTriggerSlot[0] = 0; // image slot to trigger when clicking
+	gunTriggerLoad[0] = true; // whether to set image loaded or image trigger when clicking (trigger can not be held in v20)
+	                          // if set to true, the image will be LOADED when left click is NOT being held!! (i.e. trigger status is inverted in load mode)
 
 	maxDamage = 200.00;
 	destroyedLevel = 200.00;
