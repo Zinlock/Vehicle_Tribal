@@ -113,6 +113,8 @@ function Player::vehiclePrintLoop(%pl, %node)
 
 	%hcol = rgb2hex(RGBLerp(%hcolMax, %hcolMin, %hp));
 
+	%str = "<color:FFFFFF><font:arial bold:16><spush><spush>HULL <color:" @ %hcol @ "><font:arial:16>" @ mCeil(%hp * 100) @ "%<just:right><color:44FF44>" @ mFloor(vectorLen(%obj.getVelocity())) @ "u/s <spop>SPD<br>";
+
 	if(%db.useEnergyPrints)
 	{
 		%ecolMax = hex2rgba("4499FF");
@@ -121,8 +123,7 @@ function Player::vehiclePrintLoop(%pl, %node)
 		%erg = %obj.getEnergyLevel() / %db.maxEnergy;
 
 		%ecol = rgb2hex(RGBLerp(%ecolMax, %ecolMin, %erg));
-		
-		%str = "<color:FFFFFF><font:arial bold:16><spush><spush>HULL <color:" @ %hcol @ "><font:arial:16>" @ mCeil(%hp * 100) @ "%<just:right><color:44FF44>" @ mFloor(vectorLen(%obj.getVelocity())) @ "u/s <spop>SPD<br>";
+
 		%estr = "<just:left>ERG <color:" @ %ecol @ "><font:arial:16>" @ mCeil(%erg * 100) @ "%";
 	}
 	
