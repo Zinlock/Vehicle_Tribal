@@ -79,8 +79,8 @@ datablock ExplosionData(T2ShrikeBlasterExplosion : gunExplosion)
 	particleDensity = 10;
 	particleRadius = 0.0;
 
-	damageRadius = 6;
-	radiusDamage = 50;
+	damageRadius = 3;
+	radiusDamage = 20;
 };
 
 datablock ProjectileData(T2ShrikeBlasterProjectile)
@@ -147,8 +147,8 @@ datablock ShapeBaseImageData(T2ShrikeBlasterAImage)
 	tracerSize = -3; // negative value flips the tracer
 	tracerData = T2ShrikeBlasterTracer;
 
-	energyDrain = 8;
-	minEnergy = 15;
+	energyDrain = 4;
+	minEnergy = 8;
 
 	stateName[0]                    = "Ready";
 	stateTransitionOnNotLoaded[0]   = "AmmoCheck"; // using loaded instead of trigger because vehicle image triggers cant be held for some reason

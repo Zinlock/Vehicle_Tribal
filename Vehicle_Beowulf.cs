@@ -6,6 +6,9 @@ datablock PlayerData(T2BeowulfHead : TankTurretPlayer)
 {
 	shapeFile = "./dts/Beowulf_head.dts";
 	
+	boundingBox = vectorScale("2 2 1", 4);
+	boundingBox = vectorScale("2 2 1", 4);
+
 	minLookAngle = -$pi/2;
 	maxLookAngle = $pi/6;
 
@@ -21,14 +24,33 @@ datablock PlayerData(T2BeowulfHead : TankTurretPlayer)
 	gunImage[0, 1] = T2BeowulfGunImage;
 	gunItem[0] = rocketLauncherItem;
 	gunTriggerSlot[0] = 0;
-	gunTriggerLoad[0] = true;
-	
+
 	gunImage[1, 0] = T2BeowulfCannonImage;
 	gunImage[1, 1] = T2BeowulfGunImage;
 	gunItem[1] = gunItem;
 	gunTriggerSlot[1] = 1;
-	gunTriggerLoad[1] = true;
 };
+
+function T2BeowulfHead::onGunMount(%db, %obj, %pl)
+{
+	%obj.playAudio(2, T2BeowulfActivateSound);
+}
+
+function T2BeowulfHead::onGunUnMount(%db, %obj, %pl)
+{
+	%obj.setImageLoaded(0, true);
+	%obj.setImageLoaded(1, true);
+}
+
+function T2BeowulfHead::onGunEquip(%db, %obj, %pl, %old, %new)
+{
+	%obj.setImageLoaded(%db.gunTriggerSlot[%old], true);
+}
+
+function T2BeowulfHead::onGunTrigger(%db, %obj, %pl, %val)
+{
+	%obj.setImageLoaded(%db.gunTriggerSlot[%obj.currSlot], !%val);
+}
 
 function T2BeowulfHead::onDriverLeave(%this,%obj)
 {
@@ -43,8 +65,8 @@ datablock FlyingVehicleData(T2BeowulfVehicle : T2WildcatVehicle)
 	defaultColor = "0.609 0.539 0.406";
 	paintable = true;
 
-	cameraMaxDist = 9;
-	cameraOffset = 5;
+	cameraMaxDist = 10;
+	cameraOffset = 6;
 	cameraTilt = 0;
 	cameraRoll = true;
 
@@ -79,6 +101,11 @@ datablock FlyingVehicleData(T2BeowulfVehicle : T2WildcatVehicle)
 	mountToNearest = true;
 	overridePrevSeat = true;
 	overrideNextSeat = true;
+
+	numTurretHeads = 1; // how many controllable turrets
+	turretHeadData[0] = T2BeowulfHead; // turret datablock
+	turretMountPoint[0] = 2; // point to mount turret to
+	turretControlPoint[0] = 1; // mount point to link turret controls to
 	
   collDamageThresholdVel = 20;
   collDamageMultiplier = 0.02;
@@ -151,7 +178,7 @@ datablock FlyingVehicleData(T2BeowulfVehicle : T2WildcatVehicle)
 	hoverMaxDownTime = 2;
 	hoverMinDownForce = 50;
 	hoverMaxDownForce = 900;
-	hoverMinDistance = 4;
+	hoverMinDistance = 6;
 	hoverMaxDistance = 24;
 	hoverMaxFallSpeed = 200;
 
@@ -162,34 +189,6 @@ datablock FlyingVehicleData(T2BeowulfVehicle : T2WildcatVehicle)
 
 	uiName = "T2: Beowulf Assault Tank";
 };
-
-function T2BeowulfVehicle::onRemove(%this,%obj)
-{	
-	if(isObject(%obj.turret))
-		%obj.turret.delete();
-}
-
-function T2BeowulfVehicle::onAdd(%db, %obj)
-{
-	%t = new AIPlayer()
-	{
-		dataBlock = T2BeowulfHead;
-
-		isTurret = true;
-		sourceObject = %obj;
-	};
-
-	if(isObject(%t))
-	{
-		MissionCleanup.add(%t);
-		%obj.mountObject(%t, 2);
-		%obj.turret = %t;
-		%obj.gunTurret[1] = %t;
-		%t.schedule(10,"rigTurret");
-	}
-
-	Parent::onAdd(%db, %obj);
-}
 
 function T2BeowulfVehicle::onEngineLowSpeed(%db, %obj)
 {

@@ -18,15 +18,12 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	gunImage[0, 0] = T2ShrikeBlasterAImage;
 	gunImage[0, 1] = T2ShrikeBlasterBImage;
 	gunItem[0] = -1; // item to use as icon
-	gunTriggerSlot[0] = 0; // image slot to trigger when clicking
-	gunTriggerLoad[0] = true; // whether to set image loaded or image trigger when clicking (trigger can not be held in v20)
-	                          // if set to true, the image will be LOADED when left click is NOT being held!! (i.e. trigger status is inverted in load mode)
 
 	maxDamage = 200.00;
 	destroyedLevel = 200.00;
 	
 	rechargeRate = 7.5 / 31.25;
-	maxEnergy = 200;
+	maxEnergy = 100;
 	energyShield = 1.0;
 	energyScale = 5;
 	energyDelay = 3;
@@ -81,12 +78,12 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	engineBoostSound = T2ShrikeEngineSound;
 	engineBoostSpeed = 120;
 	
-	rollForce		= 5;
+	rollForce		= -10;
 	rotationalDrag		= 12;
 
 	maxAutoSpeed = 300;
 	autoInputDamping = 0.95;
-	autoAngularForce = 200;
+	autoAngularForce = 1000;
 	autoLinearForce = 60;
 
 	steeringForce = 2000;
@@ -98,7 +95,7 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 
 	hoverHeight = 5;
 	createHoverHeight = 3;
-	vertThrustMultiple = 1;
+	vertThrustMultiple = 100;
 
 	rideable = 1;
 
@@ -107,19 +104,14 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	uiName = "T2: Shrike Scout Flier";
 };
 
-function T2ShrikeVehicle::onGunMount(%db, %obj, %pl)
-{
-
-}
-
 function T2ShrikeVehicle::onGunUnMount(%db, %obj, %pl)
 {
-
+	%obj.setImageLoaded(0, true);
 }
 
 function T2ShrikeVehicle::onGunTrigger(%db, %obj, %pl, %val)
 {
-
+	%obj.setImageLoaded(0, !%val);
 }
 
 function T2ShrikeVehicle::onEngineLowSpeed(%db, %obj)

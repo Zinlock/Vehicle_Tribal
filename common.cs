@@ -1,5 +1,12 @@
 // -- SOUNDS --
 
+datablock AudioDescription(AudioExplosionFar3D : AudioDefault3D)
+{
+	maxDistance = 400;
+	referenceDistance = 40;
+	volume = 1.0;
+};
+
 datablock AudioProfile(T2VehicleImpactSound)
 {
 	filename    = "./wav/crash_soft.wav";
@@ -45,7 +52,7 @@ datablock AudioProfile(T2VehicleSplashExitSound)
 datablock AudioProfile(T2VehicleDestroySound)
 {
 	filename    = "./wav/vehicle_explosion.wav";
-	description = AudioDefault3d;
+	description = AudioExplosionFar3D;
 	preload = true;
 };
 

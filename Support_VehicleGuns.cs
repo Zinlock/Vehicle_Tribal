@@ -36,28 +36,65 @@ package T2VehicleGuns
 		}
 	}
 
+	function Armor::Damage(%db, %pl, %src, %pos, %dmg, %type)
+	{
+		if(%pl.isVehicleTurret)
+		{
+			%pl.sourceObject.damage(%src, %pos, %dmg, %type);
+			return;
+		}
+
+		return Parent::Damage(%db, %pl, %src, %pos, %dmg, %type);
+	}
+
+	function ShapeBase::setNodeColor(%obj, %node, %color)
+	{
+		Parent::setNodeColor(%obj, %node, %color);
+
+		%obj.lastNodeColor[%node] = %color;
+
+		%odb = %obj.getDataBlock();
+		if(%odb.numTurretHeads > 0)
+		{
+			for(%i = 0; %i < %odb.numTurretHeads; %i++)
+			{
+				if(isObject(%obj.turret[%i]))
+					%obj.turret[%i].setNodeColor("ALL", %color);
+			}
+		}
+	}
+
+	function T2VGOnAdd(%db, %obj)
+	{
+		if(isObject(%obj))
+		{
+			if(%db.gunImageSlots > 0)
+				%obj.setVehicleGuns(0);
+			
+			if(%db.numTurretHeads > 0)
+				%obj.schedule(0, setVehicleTurrets);
+		}
+	}
+	
 	function FlyingVehicleData::onAdd(%db, %obj)
 	{
 		Parent::onAdd(%db, %obj);
 
-		if(isObject(%obj) && %db.gunImageSlots > 0)
-			%obj.setVehicleGuns(0);
+		T2VGOnAdd(%db, %obj);
 	}
 
 	function WheeledVehicleData::onAdd(%db, %obj)
 	{
 		Parent::onAdd(%db, %obj);
 
-		if(isObject(%obj) && %db.gunImageSlots > 0)
-			%obj.setVehicleGuns(0);
+		T2VGOnAdd(%db, %obj);
 	}
 	
 	function Armor::onAdd(%db, %pl)
 	{
 		Parent::onAdd(%db, %pl);
 
-		if(isObject(%pl) && %db.gunImageSlots > 0 && %pl.getClassName() $= "AIPlayer")
-			%pl.setVehicleGuns(0);
+		T2VGOnAdd(%db, %pl);
 	}
 
 	function serverCmdPrevSeat(%cl)
@@ -88,7 +125,7 @@ package T2VehicleGuns
 		Parent::serverCmdNextSeat(%cl);
 	}
 
-	function WheeledVehicleData::onCollision (%db, %obj, %col, %vec, %vel)
+	function T2VGMountCheck(%db, %obj, %col)
 	{
 		if((miniGameCanUse(%col, %obj) == 1 || !isObject(findClientByBL_ID(%obj.spawnBrick.getGroup().bl_id)) || getTrustLevel(%col, %obj) >= $TrustLevel::RideVehicle) && %col.getClassName() $= "Player" && %db.mountToNearest)
 		{
@@ -96,116 +133,90 @@ package T2VehicleGuns
 			%mount = true;
 			%col.lastMountTime = getSimTime();
 		}
-		
-		Parent::onCollision(%db, %obj, %col, %vec, %vel);
+		else
+			%time = -1;
 
-		if(%mount)
+		return %time;
+	}
+
+	function T2VGMount(%db, %obj, %col, %time)
+	{
+		%col.lastMountTime = %time;
+
+		if(%col.getDataBlock().canRide && %db.rideAble && %db.nummountpoints > 0)
 		{
-			%col.lastMountTime = %time;
-
-			if(%col.getDataBlock().canRide && %db.rideAble && %db.nummountpoints > 0)
+			if(getSimTime() - %col.lastMountTime > $Game::MinMountTime)
 			{
-				if(getSimTime() - %col.lastMountTime > $Game::MinMountTime)
+				%colZpos = getWord (%col.getPosition (), 2);
+				%objZpos = getWord (%obj.getPosition (), 2);
+				if (%colZpos > %objZpos + 0.2)
 				{
-					%colZpos = getWord (%col.getPosition (), 2);
-					%objZpos = getWord (%obj.getPosition (), 2);
-					if (%colZpos > %objZpos + 0.2)
+					%dist = 999;
+					%nearest = -1;
+					%isSlot = true;
+					for (%i = 0; %i < %db.nummountpoints; %i += 1)
 					{
-						// if (%canUse)
-						// {
+						%blockingObj = %obj.getMountNodeObject (%i);
 
-							%dist = 999;
-							%nearest = -1;
+						if (isObject (%blockingObj))
+						{
+							if (!%blockingObj.getDataBlock ().rideAble || isObject(%blockingObj.getMountedObject(0)))
+								continue;
+							
+							if((%nd = vectorDist(%blockingObj.getPosition(), %col.getPosition())) < %dist)
+							{
+								%dist = %nd;
+								%nearest = %blockingObj;
+								%isSlot = false;
+							}
+							continue;
+						}
+
+						if((%nd = vectorDist(%obj.getSlotTransform(%i), %col.getPosition())) < %dist)
+						{
+							%dist = %nd;
+							%nearest = %i;
 							%isSlot = true;
-							for (%i = 0; %i < %db.nummountpoints; %i += 1)
-							{
-								%blockingObj = %obj.getMountNodeObject (%i);
+						}
+					}
 
-								if (isObject (%blockingObj))
-								{
-									if (!%blockingObj.getDataBlock ().rideAble || isObject(%blockingObj.getMountedObject(0)))
-										continue;
-									
-									if((%nd = vectorDist(%blockingObj.getPosition(), %col.getPosition())) < %dist)
-									{
-										%dist = %nd;
-										%nearest = %blockingObj;
-										%isSlot = false;
-									}
-									// %blockingObj.mountObject (%col, 0);
-									// if(%blockingObj.getControllingClient () == 0)
-									// {
-									// 	%col.setControlObject (%blockingObj);
-									// }
-									continue;
-								}
+					if(!%isSlot && isObject(%nearest))
+					{
+						%nearest.mountObject(%col, 0);
+						
+						if(%nearest.getControllingClient() == 0)
+							%col.setControlObject(%nearest);
+					}
+					else if(%isSlot && %nearest >= 0)
+					{
+						%obj.mountObject(%col, %nearest);
 
-								if((%nd = vectorDist(%obj.getSlotTransform(%i), %col.getPosition())) < %dist)
-								{
-									%dist = %nd;
-									%nearest = %i;
-									%isSlot = true;
-								}
-								// %obj.mountObject (%col, %i);
-
-								// if (%i == 0)
-								// {
-								// 	if (%obj.getControllingClient () == 0)
-								// 	{
-								// 		%col.setControlObject (%obj);
-								// 	}
-								// }
-								// break;
-							}
-
-							if(!%isSlot && isObject(%nearest))
-							{
-								%nearest.mountObject(%col, 0);
-								
-								if(%nearest.getControllingClient() == 0)
-									%col.setControlObject(%nearest);
-							}
-							else if(%isSlot && %nearest >= 0)
-							{
-								%obj.mountObject(%col, %nearest);
-
-								if(%obj.getControllingClient() == 0 && %nearest == 0)
-									%col.setControlObject (%obj);
-							}
-						// }
-						// else 
-						// {
-						// 	%ownerName = %obj.spawnBrick.getGroup ().name;
-						// 	%msg = %ownerName @ " does not trust you enough to do that";
-						// 	if ($lastError == $LastError::Trust)
-						// 	{
-						// 		%msg = %ownerName @ " does not trust you enough to ride.";
-						// 	}
-						// 	else if ($lastError == $LastError::MiniGameDifferent)
-						// 	{
-						// 		if (isObject (%col.client.miniGame))
-						// 		{
-						// 			%msg = "This vehicle is not part of the mini-game.";
-						// 		}
-						// 		else 
-						// 		{
-						// 			%msg = "This vehicle is part of a mini-game.";
-						// 		}
-						// 	}
-						// 	else if ($lastError == $LastError::MiniGameNotYours)
-						// 	{
-						// 		%msg = "You do not own this vehicle.";
-						// 	}
-						// 	else if ($lastError == $LastError::NotInMiniGame)
-						// 	{
-						// 		%msg = "This vehicle is not part of the mini-game.";
-						// 	}
-						// 	commandToClient (%col.client, 'CenterPrint', %msg, 1);
-						// }
+						if(%obj.getControllingClient() == 0 && %nearest == 0)
+							%col.setControlObject (%obj);
 					}
 				}
 			}
 		}
+	}
+
+	function FlyingVehicleData::onCollision (%db, %obj, %col, %vec, %vel)
+	{
+		%time = T2VGMountCheck(%db, %obj, %col);
+		
+		Parent::onCollision(%db, %obj, %col, %vec, %vel);
+
+		if(%time >= 0)
+			T2VGMount(%db, %obj, %col, %time);
+	}
+
+	function WheeledVehicleData::onCollision (%db, %obj, %col, %vec, %vel)
+	{
+		%time = T2VGMountCheck(%db, %obj, %col);
+		
+		Parent::onCollision(%db, %obj, %col, %vec, %vel);
+
+		if(%time >= 0)
+			T2VGMount(%db, %obj, %col, %time);
 	}
 
 	function Armor::onMount(%db, %pl, %col, %node)
@@ -221,13 +232,17 @@ package T2VehicleGuns
 				%col.lastMountedPlayer = %pl;
 				%col.lastMountedClient = %pl.Client;
 				%pl.setVehicleGunInventory(%col);
+				
+				%col.getDataBlock().onGunMount(%col, %pl);
 			}
-			else if(isObject(%col.gunTurret[%node]) && %col.gunTurret[%node].getDataBlock().gunImageSlots > 0)
+			else if(isObject(%tur = %col.gunTurret[%node]) && %tur.getDataBlock().gunImageSlots > 0)
 			{
-				%col.gunTurret[%node].lastMountedPlayer = %pl;
-				%col.gunTurret[%node].lastMountedClient = %pl.Client;
-				%pl.setVehicleGunInventory(%col.gunTurret[%node]);
-				%pl.setControlObject(%col.gunTurret[%node]);
+				%tur.lastMountedPlayer = %pl;
+				%tur.lastMountedClient = %pl.Client;
+				%pl.setVehicleGunInventory(%tur);
+				%pl.setControlObject(%tur);
+				
+				%tur.getDataBlock().onGunMount(%tur, %pl);
 			}
 			else if(%col.getDataBlock().blockImages[%node])
 			{
@@ -242,6 +257,12 @@ package T2VehicleGuns
 	{
 		Parent::onUnMount(%db, %pl, %col, %node);
 
+		if(%pl.isVehicleTurret)
+		{
+			%pl.schedule(0, delete);
+			return;
+		}
+
 		if(isObject(%pl))
 			%pl.setVehicleGunInventory(-1);
 		
@@ -249,10 +270,7 @@ package T2VehicleGuns
 		{
 			%odb = %col.getDataBlock();
 
-			if(%odb.gunTriggerLoad[%col.currSlot])
-				%col.setImageLoaded(%odb.gunTriggerSlot[%col.currSlot], 1);
-			else
-				%col.setImageTrigger(%odb.gunTriggerSlot[%col.currSlot], 0);
+			%odb.onGunUnMount(%col, %pl);
 		}
 		else if(isObject(%col.gunTurret[%node]))
 		{
@@ -261,10 +279,7 @@ package T2VehicleGuns
 
 			%odb = %tur.getDataBlock();
 
-			if(%odb.gunTriggerLoad[%tur.currSlot])
-				%tur.setImageLoaded(%odb.gunTriggerSlot[%tur.currSlot], 1);
-			else
-				%tur.setImageTrigger(%odb.gunTriggerSlot[%tur.currSlot], 0);
+			%odb.onGunUnMount(%tur, %pl);
 		}
 	}
 
@@ -273,11 +288,7 @@ package T2VehicleGuns
 		if(%trig == 0 && isObject(%obj = %pl.usingVehicleGuns))
 		{
 			%odb = %obj.getDataBlock();
-
-			if(%odb.gunTriggerLoad[%obj.currSlot])
-				%obj.setImageLoaded(%odb.gunTriggerSlot[%obj.currSlot], !%val);
-			else
-				%obj.setImageTrigger(%odb.gunTriggerSlot[%obj.currSlot], %val);
+			%odb.onGunTrigger(%obj, %pl, %val);
 
 			return;
 		}
@@ -318,14 +329,56 @@ package T2VehicleGuns
 		Parent::serverCmdUseTool(%cl, %idx);
 	}
 };
-activatePackage(T2VehicleGuns);
+schedule(0, 0, activatePackage, T2VehicleGuns);
 
 function VehicleData::onPrevSeat(%db, %obj, %pl) { }
+function Armor::onPrevSeat(%db, %obj, %pl) { }
 function VehicleData::onNextSeat(%db, %obj, %pl) { }
+function Armor::onNextSeat(%db, %obj, %pl) { }
 
 function VehicleData::onGunMount(%db, %obj, %pl) { }
+function Armor::onGunMount(%db, %obj, %pl) { }
 function VehicleData::onGunUnMount(%db, %obj, %pl) { }
+function Armor::onGunUnMount(%db, %obj, %pl) { }
 function VehicleData::onGunTrigger(%db, %obj, %pl, %val) { }
+function Armor::onGunTrigger(%db, %obj, %pl, %val) { }
+function VehicleData::onGunEquip(%db, %obj, %pl, %old, %new) { }
+function Armor::onGunEquip(%db, %obj, %pl, %old, %new) { }
+
+function AIPlayer::setVehicleTurrets(%obj) { Vehicle::setVehicleTurrets(%obj); }
+
+function Vehicle::setVehicleTurrets(%obj)
+{
+	%odb = %obj.getDataBlock();
+
+	if(%odb.numTurretHeads <= 0)
+		return;
+
+	for(%i = 0; %i < %odb.numTurretHeads; %i++)
+	{
+		%t = new AIPlayer()
+		{
+			dataBlock = %odb.turretHeadData[%i];
+
+			isVehicleTurret = true;
+			sourceObject = %obj;
+			spawnBrick = %obj.spawnBrick;
+			brickGroup = %obj.brickGroup;
+		};
+
+		if(isObject(%t))
+		{
+			MissionCleanup.add(%t);
+
+			%obj.mountObject(%t, %odb.turretMountPoint[%i]);
+			%obj.gunTurret[%odb.turretControlPoint[%i]] = %t;
+			%obj.turret[%i] = %t;
+
+			if(%obj.lastNodeColor["ALL"] !$= "")
+				%t.setNodeColor("ALL", %obj.lastNodeColor["ALL"]);
+		}
+	}
+}
 
 function AIPlayer::setVehicleGuns(%obj, %idx) { Vehicle::setVehicleGuns(%obj, %idx); }
 
@@ -336,13 +389,8 @@ function Vehicle::setVehicleGuns(%obj, %idx)
 	if(%idx >= %odb.gunImageSlots)
 		return;
 
-	if(%idx != %obj.currSlot)
-	{
-		if(%odb.gunTriggerLoad[%obj.currSlot])
-			%obj.setImageLoaded(%odb.gunTriggerSlot[%obj.currSlot], 1);
-		else
-			%obj.setImageTrigger(%odb.gunTriggerSlot[%obj.currSlot], 0);
-	}
+	if(%idx != %obj.currSlot && %obj.currSlot !$= "")
+		%odb.onGunEquip(%obj, %obj.lastMountedPlayer, %obj.currSlot, %idx);
 
 	for(%i = 0; %i < 4; %i++)
 	{

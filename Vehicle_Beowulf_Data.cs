@@ -38,7 +38,7 @@ datablock AudioProfile(T2BeowulfFireSound)
 datablock AudioProfile(T2BeowulfImpactSound)
 {
 	filename    = "./wav/Beowulf_cannon_impact.wav";
-	description = AudioDefault3d;
+	description = AudioExplosionFar3D;
 	preload = true;
 };
 
@@ -86,7 +86,7 @@ datablock ParticleEmitterData(T2BeowulfGunImpactEmitter)
 datablock ExplosionData(T2BeowulfGunExplosion : gunExplosion)
 {
 	damageRadius = 3;
-	radiusDamage = 5;
+	radiusDamage = 10;
 
 	lightStartColor = "1.0 0.9 0.0 1.0";
 };
@@ -146,7 +146,7 @@ datablock ShapeBaseImageData(T2BeowulfGunImage)
 
 	projectile = T2BeowulfGunProjectile;
 	projectileCount = 1;
-	projectileSpread = 0.75;
+	projectileSpread = 0.5;
 	projectileSpeed = 200;
 
 	projectileHitscan = true;
@@ -157,12 +157,14 @@ datablock ShapeBaseImageData(T2BeowulfGunImage)
 
 	fireSound = T2BeowulfMGFireSound;
 
-	energyDrain = 4;
+	energyDrain = 3;
 	minEnergy = 10;
 
 	stateName[0]                    = "Ready";
-	stateTransitionOnNotLoaded[0]   = "AmmoCheck";
+	stateTransitionOnNotLoaded[0]   = "Fire";
+	stateTransitionOnNoAmmo[0]      = "AmmoCheck";
 	stateTimeoutValue[0]            = 0.1;
+	stateSequence[0]                = "root";
 	stateTransitionOnTimeout[0]     = "Ready";
 	stateScript[0]                  = "onReadyLoop";
 
@@ -174,7 +176,7 @@ datablock ShapeBaseImageData(T2BeowulfGunImage)
 	stateScript[1]                  = "onFire";
 
 	stateName[2]                    = "Delay";
-	stateTransitionOnTimeout[2]     = "Ready";
+	stateTransitionOnTimeout[2]     = "AmmoCheck";
 	stateWaitForTimeout[2]          = True;
 	stateTimeoutValue[2]            = 0.0;
 	stateScript[2]                  = "onDelay";
@@ -186,21 +188,23 @@ datablock ShapeBaseImageData(T2BeowulfGunImage)
 	stateScript[3]                  = "onAmmoCheck";
 	
 	stateName[4]                    = "AmmoCheckB";
-	stateTransitionOnAmmo[4]        = "Fire";
+	stateTransitionOnAmmo[4]        = "Ready";
+	stateTransitionOnNoAmmo[4]      = "AmmoCheck";
 	stateTransitionOnTimeout[4]     = "Ready";
-	stateTimeoutValue[4]            = 0.0;
+	stateTimeoutValue[4]            = 0.033;
 };
 
 function T2BeowulfGunImage::onMount(%img, %obj, %slot)
 {
 	%obj.sourceObject.useExtraPrints = true;
-	%obj.sourceObject.extraPrintLabel = "HEAT";
+	%obj.sourceObject.extraPrintLabel = "RDS";
 	%obj.sourceObject.extraPrintColor = "FFEE44";
 }
 
 function T2BeowulfGunImage::onReadyLoop(%img, %obj, %slot)
 {
-	%obj.sourceObject.extraPrintText = mCeil((1 - (%obj.getEnergyLevel() / %obj.getDataBlock().maxEnergy)) * 100);
+	%obj.sourceObject.extraPrintText = mCeil((%obj.getEnergyLevel() / %obj.getDataBlock().maxEnergy) * 100) @ "%";
+	%img.onAmmoCheck(%obj, %slot);
 }
 
 function T2BeowulfGunImage::onFire(%img, %obj, %slot)
@@ -279,7 +283,7 @@ datablock ExplosionData(T2BeowulfCannonExplosion : T2VehicleInitialExplosion)
 	debrisNumVariance = 0;
 
 	damageRadius = 12;
-	radiusDamage = 70;
+	radiusDamage = 90;
 };
 
 datablock ProjectileData(T2BeowulfCannonProjectile)
@@ -302,7 +306,7 @@ datablock ProjectileData(T2BeowulfCannonProjectile)
 	particleEmitter    = T2BeowulfCannonTrailEmitter;
 
 	explodeOnDeath = true;
-	explodeOnPlayerImpact = true;
+	explodeOnPlayerImpact = false;
 
 	muzzleVelocity      = 200;
 	velInheritFactor    = 0;
@@ -333,13 +337,14 @@ datablock ShapeBaseImageData(T2BeowulfCannonImage : T2BeowulfGunImage)
 	projectile = T2BeowulfCannonProjectile;
 	projectileHitscan = false;
 	
-	energyDrain = 25;
+	energyDrain = 20;
 	minEnergy = 25;
 
 	rotation = eulerToMatrix("-90 0 0");
 	
 	stateName[0]                    = "Ready";
-	stateTransitionOnNotLoaded[0]   = "AmmoCheck";
+	stateTransitionOnNotLoaded[0]   = "Fire";
+	stateTransitionOnNoAmmo[0]      = "AmmoCheck";
 	stateTimeoutValue[0]            = 0.1;
 	stateSequence[0]                = "root";
 	stateTransitionOnTimeout[0]     = "Ready";
@@ -349,13 +354,13 @@ datablock ShapeBaseImageData(T2BeowulfCannonImage : T2BeowulfGunImage)
 	stateSequence[1]                = "fire";
 	stateTransitionOnTimeout[1]     = "Delay";
 	stateWaitForTimeout[1]          = True;
-	stateTimeoutValue[1]            = 0.3;
+	stateTimeoutValue[1]            = 0.4;
 	stateScript[1]                  = "onFire";
 
 	stateName[2]                    = "Delay";
-	stateTransitionOnTimeout[2]     = "Ready";
+	stateTransitionOnTimeout[2]     = "AmmoCheck";
 	stateWaitForTimeout[2]          = True;
-	stateTimeoutValue[2]            = 0.8;
+	stateTimeoutValue[2]            = 0.6;
 	stateScript[2]                  = "onDelay";
 
 	stateName[3]                    = "AmmoCheck";
@@ -365,7 +370,8 @@ datablock ShapeBaseImageData(T2BeowulfCannonImage : T2BeowulfGunImage)
 	stateScript[3]                  = "onAmmoCheck";
 	
 	stateName[4]                    = "AmmoCheckB";
-	stateTransitionOnAmmo[4]        = "Fire";
+	stateTransitionOnAmmo[4]        = "Ready";
+	stateTransitionOnNoAmmo[4]      = "AmmoCheck";
 	stateTransitionOnTimeout[4]     = "Ready";
 	stateTimeoutValue[4]            = 0.033;
 };
