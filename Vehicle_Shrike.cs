@@ -107,6 +107,21 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	uiName = "T2: Shrike Scout Flier";
 };
 
+function T2ShrikeVehicle::onGunMount(%db, %obj, %pl)
+{
+
+}
+
+function T2ShrikeVehicle::onGunUnMount(%db, %obj, %pl)
+{
+
+}
+
+function T2ShrikeVehicle::onGunTrigger(%db, %obj, %pl, %val)
+{
+
+}
+
 function T2ShrikeVehicle::onEngineLowSpeed(%db, %obj)
 {
 	%obj.unMountImage(2);

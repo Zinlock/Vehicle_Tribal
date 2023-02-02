@@ -2,6 +2,7 @@
 // Tribes 2 vehicles remade for Blockland
 
 forceRequiredAddon("Vehicle_Jeep");
+forceRequiredAddon("Vehicle_Tank");
 forceRequiredAddon("Weapon_Gun");
 forceRequiredAddon("Weapon_Rocket_Launcher");
 
@@ -29,10 +30,11 @@ exec("./Support_VehicleCrash.cs");
 exec("./Support_EnergyShield.cs");
 exec("./Support_VehicleGuns.cs");
 exec("./Support_VehiclePrint.cs");
+exec("./Support_ArmingDelayFix.cs");
 
 exec("./Vehicle_Wildcat.cs");
 exec("./Vehicle_Shrike.cs");
-// exec("./Vehicle_Beowulf.cs");       // todo
+exec("./Vehicle_Beowulf.cs");
 // exec("./Vehicle_Thundersword.cs");  // todo
 // exec("./Vehicle_Jericho.cs");       // todo (requires Weapon_Turrets)
 // exec("./Vehicle_Havoc.cs");         // todo

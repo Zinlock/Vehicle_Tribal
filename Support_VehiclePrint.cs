@@ -128,7 +128,7 @@ function Player::vehiclePrintLoop(%pl, %node)
 	}
 	
 	if(%obj.useExtraPrints)
-		%hstr = "<just:right><color:" @ stripMLControlChars(%obj.extraPrintColor) @ "><font:arial:16>" @ stripMLControlChars(%obj.extraPrintText) @ " <spush>" @ stripMLControlChars(%obj.extraPrintLabel);
+		%hstr = "<just:right><color:" @ stripMLControlChars(%obj.extraPrintColor) @ "><font:arial:16>" @ stripMLControlChars(%obj.extraPrintText) @ " <spop>" @ stripMLControlChars(%obj.extraPrintLabel);
 
 	commandToClient(%cl, 'bottomPrint', %str @ %estr @ %hstr, 1, 1);
 
