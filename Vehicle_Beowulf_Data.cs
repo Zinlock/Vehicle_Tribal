@@ -399,22 +399,22 @@ datablock ParticleData(T2BeowulfJetParticle)
 	constantAcceleration = 0.0;
 	spinRandomMin = -90;
 	spinRandomMax = 90;
-	lifetimeMS           = 500;
+	lifetimeMS           = 300;
 	lifetimeVarianceMS   = 0;
 	textureName          = "base/data/particles/cloud";
 	useInvAlpha = false;
 
 	colors[0]     = "0.9 0.5 0.1 0.2";
 	colors[1]     = "0.2 0.2 0.2 0";
-	sizes[0]      = 4;
-	sizes[1]      = 10;
+	sizes[0]      = 2;
+	sizes[1]      = 5;
 };
 
 datablock ParticleEmitterData(T2BeowulfJetEmitter)
 {
 	ejectionPeriodMS = 10;
 	periodVarianceMS = 3;
-	ejectionVelocity = -20;
+	ejectionVelocity = -10;
 	velocityVariance = 0.0;
 	ejectionOffset   = 0.0;
 	thetaMin         = 0;
@@ -425,9 +425,16 @@ datablock ParticleEmitterData(T2BeowulfJetEmitter)
 	particles = "T2BeowulfJetParticle";
 };
 
-datablock ShapeBaseImageData(T2BeowulfJetImage : T2Contrail2Image)
+datablock ShapeBaseImageData(T2BeowulfJetAImage : T2Contrail2Image)
 {
 	mountPoint = 3;
+	stateEmitter[1]					= T2BeowulfJetEmitter;
+	stateEmitter[2]					= T2BeowulfJetEmitter;
+};
+
+datablock ShapeBaseImageData(T2BeowulfJetBImage : T2Contrail2Image)
+{
+	mountPoint = 4;
 	stateEmitter[1]					= T2BeowulfJetEmitter;
 	stateEmitter[2]					= T2BeowulfJetEmitter;
 };
@@ -437,7 +444,7 @@ datablock ShapeBaseImageData(T2BeowulfJetImage : T2Contrail2Image)
 
 datablock DebrisData(T2BeowulfFinalExplosionDebrisE)
 {
-	shapeFile = "./dts/Beowulf_wreck_tube.dts";
+	shapeFile = "./dts/Beowulf_wreck_head.dts";
 	lifetime = 10.0;
 	minSpinSpeed = -400.0;
 	maxSpinSpeed = 400.0;
@@ -476,7 +483,7 @@ datablock ExplosionData(T2BeowulfFinalExplosionE)
 	uiName = "";
 
 	debris = T2BeowulfFinalExplosionDebrisE;
-	debrisNum = 2;
+	debrisNum = 1;
 	debrisNumVariance = 0;
 	debrisPhiMin = 0;
 	debrisPhiMax = 360;
@@ -488,7 +495,7 @@ datablock ExplosionData(T2BeowulfFinalExplosionE)
 
 datablock DebrisData(T2BeowulfFinalExplosionDebrisF : T2BeowulfFinalExplosionDebrisE)
 {
-	shapeFile = "./dts/Beowulf_wreck_bodyTop.dts";
+	shapeFile = "./dts/Beowulf_wreck_bodyBack.dts";
 	elasticity = 0.6;
 	friction = 0.1;
 	numBounces = 4;
@@ -502,7 +509,7 @@ datablock ExplosionData(T2BeowulfFinalExplosionF : T2BeowulfFinalExplosionE)
 
 datablock DebrisData(T2BeowulfFinalExplosionDebrisD : T2BeowulfFinalExplosionDebrisE)
 {
-	shapeFile = "./dts/Beowulf_wreck_thruster.dts";
+	shapeFile = "./dts/Beowulf_wreck_bodyFront.dts";
 	elasticity = 0.6;
 	friction = 0.1;
 	numBounces = 4;
@@ -530,7 +537,7 @@ datablock ExplosionData(T2BeowulfFinalExplosionC : T2BeowulfFinalExplosionE)
 
 datablock DebrisData(T2BeowulfFinalExplosionDebrisB : T2BeowulfFinalExplosionDebrisE)
 {
-	shapeFile = "./dts/Beowulf_wreck_wingHolder.dts";
+	shapeFile = "./dts/Beowulf_wreck_thruster.dts";
 	elasticity = 0.6;
 	friction = 0.1;
 	numBounces = 4;
@@ -547,7 +554,7 @@ datablock ExplosionData(T2BeowulfFinalExplosionB : T2BeowulfFinalExplosionE)
 
 datablock DebrisData(T2BeowulfFinalExplosionDebrisA : T2BeowulfFinalExplosionDebrisE)
 {
-	shapeFile = "./dts/Beowulf_wreck_body.dts";
+	shapeFile = "./dts/Beowulf_wreck_bodyBack.dts";
 	elasticity = 0.6;
 	friction = 0.1;
 	numBounces = 4;
