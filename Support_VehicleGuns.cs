@@ -16,10 +16,6 @@ if(!isFunction(Armor, onUnMount))
 if(!isFunction(Armor, onTrigger))
 	eval("function Armor::onTrigger(%db, %pl, %trig, %val) { }");
 
-// todo: add support for aiplayer based guns
-// todo: make aiplayer guns redirect damage to the vehicle
-// todo: make it so vehicle mountpoints can control ai guns
-
 package T2VehicleGuns
 {
 	function createUINameTable()
