@@ -34,7 +34,7 @@ package T2VehicleGuns
 
 	function Armor::Damage(%db, %pl, %src, %pos, %dmg, %type)
 	{
-		if(%pl.isVehicleTurret)
+		if(%pl.isVehicleTurret && isObject(%pl.sourceObject))
 		{
 			%pl.sourceObject.damage(%src, %pos, %dmg, %type);
 			return;
@@ -123,10 +123,31 @@ package T2VehicleGuns
 
 	function T2VGMountCheck(%db, %obj, %col)
 	{
-		if((miniGameCanUse(%col, %obj) == 1 || !isObject(findClientByBL_ID(%obj.spawnBrick.getGroup().bl_id)) || getTrustLevel(%col, %obj) >= $TrustLevel::RideVehicle) && %col.getClassName() $= "Player" && %db.mountToNearest)
+		if(!%db.mountToNearest || !isObject(%obj) || !isObject(%col))
+			return -1;
+		
+		%canUse = false;
+
+		%vehicleOwner = 0;
+		if(isObject(%obj.spawnBrick))
+			%vehicleOwner = findClientByBL_ID(%obj.spawnBrick.getGroup().bl_id);
+
+		if((%mgcu = miniGameCanUse(%col, %obj)) != -1)
+			%canUse = %mgcu;
+		else
+		{
+			if(isObject(%vehicleOwner))
+			{
+				if(getTrustLevel(%col, %obj) >= $TrustLevel::RideVehicle)
+					%canUse = 1;
+			}
+			else
+				%canUse = 1;
+		}
+
+		if(%canUse && %col.getClassName() $= "Player")
 		{
 			%time = %col.lastMountTime;
-			%mount = true;
 			%col.lastMountTime = getSimTime();
 		}
 		else
@@ -137,6 +158,9 @@ package T2VehicleGuns
 
 	function T2VGMount(%db, %obj, %col, %time)
 	{
+		if(!isObject(%obj) || !isObject(%col))
+			return;
+
 		%col.lastMountTime = %time;
 
 		if(%col.getDataBlock().canRide && %db.rideAble && %db.nummountpoints > 0)
@@ -219,7 +243,7 @@ package T2VehicleGuns
 	{
 		Parent::onMount(%db, %pl, %col, %node);
 
-		if(isObject(%pl))
+		if(isObject(%pl) && isObject(%col))
 		{
 			%pl.lastMountNode = %node;
 
