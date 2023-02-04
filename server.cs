@@ -35,6 +35,6 @@ exec("./Support_ArmingDelayFix.cs");
 exec("./Vehicle_Wildcat.cs");
 exec("./Vehicle_Shrike.cs");
 exec("./Vehicle_Beowulf.cs");
+exec("./Vehicle_Havoc.cs");
 // exec("./Vehicle_Thundersword.cs");  // todo
 // exec("./Vehicle_Jericho.cs");       // todo (requires Weapon_Turrets)
-// exec("./Vehicle_Havoc.cs");         // todo

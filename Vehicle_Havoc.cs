@@ -1,0 +1,131 @@
+exec("./Vehicle_Havoc_Data.cs");
+
+// -- VEHICLE --
+
+// mounts:
+// 0 driver
+// 1-5 passenger
+// 6-7 jet
+// 8-9 contrail
+// 10-11 up jet
+
+datablock FlyingVehicleData(T2HavocVehicle : T2WildcatVehicle)
+{
+	shapeFile = "./dts/Havoc.dts";
+
+	defaultColor = "0.1 0.6 0.9";
+
+	cameraMaxDist = 14;
+	cameraOffset = 10;
+	cameraTilt = 0;
+	cameraRoll = true;
+
+	maxDamage = 350.00;
+	destroyedLevel = 350.00;
+	
+	rechargeRate = 7.5 / 31.25;
+	maxEnergy = 50;
+	energyShield = 1.0;
+	energyScale = 5;
+	energyDelay = 3;
+
+	useVehiclePrints[0] = true;
+	useEnergyPrints = true;
+
+	maxSteeringAngle = $pi/6;
+	integration = 8;
+
+	massBox = "0 0 0";
+	massCenter = "0 0 -0.25";
+
+	mass = 400;
+	density = 5.0;
+	drag = 1.6;
+
+	minDrag = 50;
+	maxDrag = 40;
+
+	numMountPoints = 6;
+	mountThread[0] = "sit";
+	blockImages[0] = true;
+	mountThread[1] = "root";
+	mountThread[2] = "sit";
+	mountThread[3] = "sit";
+	mountThread[4] = "sit";
+	mountThread[5] = "sit";
+	mountToNearest = true;
+	
+  collDamageThresholdVel = 20;
+  collDamageMultiplier = 0.02;
+
+	bodyFriction = 0.6;
+	bodyRestitution = 0.6;
+
+	softImpactSpeed = 15;
+	softImpactSound = T2VehicleImpactSound;
+	hardImpactSpeed = 25;
+	hardImpactSound = T2VehicleImpactHardSound;
+
+	minImpactSpeed = 25;
+	minImpactDamage = 80;
+	maxImpactSpeed = 100;
+	maxImpactDamage = 500;
+
+	groundImpactMinSpeed = 10.0;
+	speedDamageScale = 0.010;
+	
+	damageLevelTolerance[0] = 0.65;
+
+	finalExplosionProjectile = T2HavocFinalExplosionProjectile;
+
+	useEngineSounds = true;
+	engineSlot = 1;
+	engineIdleSound = T2HavocIdleSound;
+	engineMoveSound = T2HavocEngineSound;
+	engineMoveSpeed = 30;
+	engineBoostSound = T2HavocEngineSound;
+	engineBoostSpeed = 120;
+	
+	rollForce		= -10;
+	rotationalDrag		= 12;
+
+	maxAutoSpeed = 300;
+	autoInputDamping = 0.95;
+	autoAngularForce = 500;
+	autoLinearForce = 60;
+
+	steeringForce = 1000;
+	steeringRollForce = 100;
+	
+	maneuveringForce = 5000;
+	horizontalSurfaceForce = 200;
+	verticalSurfaceForce = 200;
+
+	hoverHeight = 5;
+	createHoverHeight = 3;
+	vertThrustMultiple = 100;
+
+	rideable = 1;
+
+	isHoverVehicle = false;
+
+	uiName = "T2: Havoc Armored Transport";
+};
+
+function T2HavocVehicle::onEngineLowSpeed(%db, %obj)
+{
+	%obj.unMountImage(1);
+	%obj.unMountImage(2);
+}
+
+function T2HavocVehicle::onEngineMedSpeed(%db, %obj)
+{
+	%obj.mountImage(T2HavocJetAImage, 1);
+	%obj.mountImage(T2HavocJetBImage, 2);
+}
+
+function T2HavocVehicle::onEngineHighSpeed(%db, %obj)
+{
+	%obj.mountImage(T2HavocJetAImage, 1);
+	%obj.mountImage(T2HavocJetBImage, 2);
+}
