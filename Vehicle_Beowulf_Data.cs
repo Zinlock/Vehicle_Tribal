@@ -152,7 +152,7 @@ datablock ShapeBaseImageData(T2BeowulfGunImage)
 	projectileHitscan = true;
 	projectileHitscanRange = 400;
 	projectileScale = 1;
-	tracerSize = -2; // negative value flips the tracer
+	tracerSize = 2;
 	tracerData = T2BeowulfGunTracer;
 
 	fireSound = T2BeowulfMGFireSound;

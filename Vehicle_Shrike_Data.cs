@@ -144,7 +144,7 @@ datablock ShapeBaseImageData(T2ShrikeBlasterAImage)
 	projectileHitscan = true;
 	projectileHitscanRange = 600;
 	projectileScale = 1;
-	tracerSize = -3; // negative value flips the tracer
+	tracerSize = 3; // negative value flips the tracer
 	tracerData = T2ShrikeBlasterTracer;
 
 	energyDrain = 4;
