@@ -42,6 +42,6 @@ function WheeledVehicle::impactCheck(%obj, %col, %vec)
 
 	%dmg = %db.minImpactDamage + %mult * (%db.maxImpactDamage - %db.minImpactDamage);
 
-	%obj.damage(%obj, %obj.getPosition(), %dmg, $DamageType::Fall);
+	%obj.schedule(0, damage, %obj, %obj.getPosition(), %dmg, $DamageType::Fall);
 	%obj.lastImpactTime = getSimTime();
 }
