@@ -16,11 +16,11 @@ function tv(%td)
 
 // todo: 
 //   x Wildcat Gravcycle
-//   o Beowulf Tank
+//   x Beowulf Tank
 //   x Shrike Scout
 //   o Thundersword Bomber
 //   o Jericho MPB
-//   o Havoc Transport
+//   x Havoc Transport
 //   o Vehicle Pad
 
 exec("./common.cs");
