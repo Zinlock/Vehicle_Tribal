@@ -19,11 +19,11 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	gunImage[0, 1] = T2ShrikeBlasterBImage;
 	gunItem[0] = -1; // item to use as icon
 
-	maxDamage = 200.00;
-	destroyedLevel = 200.00;
+	maxDamage = 250.00;
+	destroyedLevel = 250.00;
 	
 	rechargeRate = 7.5 / 31.25;
-	maxEnergy = 100;
+	maxEnergy = 150;
 	energyShield = 1.0;
 	energyScale = 5;
 	energyDelay = 3;
@@ -59,9 +59,9 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	hardImpactSound = T2VehicleImpactHardSound;
 
 	minImpactSpeed = 25;
-	minImpactDamage = 80;
-	maxImpactSpeed = 100;
-	maxImpactDamage = 500;
+	minImpactDamage = 50;
+	maxImpactSpeed = 150;
+	maxImpactDamage = 400;
 
 	groundImpactMinSpeed = 10.0;
 	speedDamageScale = 0.010;
@@ -77,16 +77,16 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	engineMoveSpeed = 60;
 	engineBoostSound = T2ShrikeEngineSound;
 	engineBoostSpeed = 120;
-	
+
 	rollForce		= -10;
 	rotationalDrag		= 12;
 
 	maxAutoSpeed = 300;
-	autoInputDamping = 0.95;
+	autoInputDamping = 0.98;
 	autoAngularForce = 500;
 	autoLinearForce = 60;
 
-	steeringForce = 2000;
+	steeringForce = 1000;
 	steeringRollForce = 100;
 	
 	maneuveringForce = 10000;
@@ -95,7 +95,8 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 
 	hoverHeight = 5;
 	createHoverHeight = 3;
-	vertThrustMultiple = 100;
+
+	vertThrustMultiple = 1;
 
 	rideable = 1;
 
