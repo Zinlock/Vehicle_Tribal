@@ -33,6 +33,7 @@ exec("./Support_VehiclePrint.cs");
 exec("./Support_ArmingDelayFix.cs");
 
 exec("./Vehicle_Wildcat.cs");
+exec("./Vehicle_Wildcat_Grav.cs");
 exec("./Vehicle_Shrike.cs");
 exec("./Vehicle_Beowulf.cs");
 exec("./Vehicle_Havoc.cs");

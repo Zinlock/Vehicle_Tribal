@@ -45,10 +45,15 @@ function FlyingVehicle::hoverLoop(%obj)
 	// * step 1
 	// check for the ground
 
+	%isGrav = %db.isAntiGrav;
+
+	if(%obj.lastGroundVector $= "")
+		%obj.lastGroundVector = vectorScale(vectorNormalize(%db.defaultGravity), -1);
+
 	%vel = %obj.getVelocity();
 	%xyvel = setWord(%vel, 2, 0);
 	%pos = vectorAdd(%obj.getPosition(), vectorScale(%obj.getUpVector(), getWord(%db.massCenter, 2)));
-	%end = VectorAdd(%pos, "0 0 -256");
+	%end = VectorAdd(%pos, vectorScale(%obj.lastGroundVector, -256));
 
 	if(%vel $= "0 0 0")
 		%obj.setVelocity("0 0 0.1");
@@ -72,6 +77,44 @@ function FlyingVehicle::hoverLoop(%obj)
 	%forceMax = %db.hoverMaxDownForce * %tick;
 	%maxDist = %db.hoverMaxDistance;
 	%minDist = %db.hoverMinDistance;
+
+	%upVector = "0 0 1";
+
+	if(%isGrav)
+	{
+		%ray2 = containerRayCast(%pos, vectorAdd(%pos, vectorScale(%obj.getUpVector(), -%db.antiGravDistance)), $HoverMask);
+
+		if(isObject(%ray2))
+		{
+			%upVector = normalFromRaycast(%ray2);
+			%obj.lastGroundTime = getSimTime();
+			%obj.lastGroundVector = %upVector;
+
+			%obj.addVelocity("0 0 " @ (%tick * mClampF(1 - (VectorDot(%upVector, "0 0 1") + 1) / 2, 0, 1)));
+		}
+		else
+		{
+			if(getSimTime() - %obj.lastGroundTime >= %db.antiGravDecayTime * 1000)
+			{
+				%upVector = vectorScale(vectorNormalize(%db.defaultGravity), -1);
+				%obj.lastGroundVector = %upVector;
+			}
+			else
+				%upVector = %obj.lastGroundVector;
+		}
+
+		%dev = vectorSub(%obj.getUpVector(), %upVector);
+
+		// drawArrow(%pos, %obj.getUpVector(), "1 1 0 0.5", 10, 0.25).schedule(500, delete);
+		// drawArrow(%pos, %upVector, "0 1 0 0.5", 10, 0.25).schedule(500, delete);
+		// drawArrow(%pos, %dev, "1 0 0 0.5", 10, 0.25).schedule(500, delete);
+
+		if(vectorLen(%dev) > 0.02)
+		{
+			%obj.applyImpulse(vectorAdd(%pos, vectorNormalize(%dev)), vectorScale(%obj.getUpVector(), vectorLen(%dev) * %db.gravityForce));
+			%obj.applyImpulse(vectorAdd(%pos, vectorScale(vectorNormalize(%dev), -1)), vectorScale(%obj.getUpVector(), vectorLen(%dev) * -%db.gravityForce));
+		}
+	}
 
 	// calculate down force
 
@@ -97,7 +140,7 @@ function FlyingVehicle::hoverLoop(%obj)
 	else if(%db.hoverCloseUpForce > 0 && (%dist < %db.hoverCloseDistance || (%db.hoverOverWater && %obj.getWaterCoverage() > 0.1)))
 	{
 		// we're actually too close (or underwater); apply up force
-		%obj.applyImpulse(%pos, vectorScale("0 0 1", (%db.hoverCloseUpForce) * %tick));
+		%obj.applyImpulse(%pos, vectorScale(%upVector, (%db.hoverCloseUpForce) * %tick));
 	}
 
 	// * step 2
@@ -111,19 +154,19 @@ function FlyingVehicle::hoverLoop(%obj)
 			%ray = containerRayCast(%pos, %end, $HoverMask);
 
 			if(!isObject(%ray))
-				%ray = containerRayCast(%pos, vectorAdd(%end, "0 0 -2"), $HoverMask);
+				%ray = containerRayCast(%pos, vectorAdd(%end, vectorScale(%upVector, -2)), $HoverMask);
 
 			if(isObject(%ray))
 			{
 				%normal = normalFromRaycast(%ray);
-				%dot = VectorDot(%normal, "0 0 1");
+				%dot = VectorDot(%normal, %upVector);
 				%ang = mRadToDeg(mAcos(%dot));
 
 				if(%ang <= %db.hoverClimbAngle)
 				{
 					%force = %db.hoverClimbForce * %tick;
 
-					%obj.applyImpulse(%pos, vectorScale("0 0 1", %force));
+					%obj.applyImpulse(%pos, vectorScale(%upVector, %force));
 
 					if(%down)
 						%down = false;
@@ -145,7 +188,7 @@ function FlyingVehicle::hoverLoop(%obj)
 			if(isObject(%ray))
 			{
 				%normal = normalFromRaycast(%ray);
-				%dot = VectorDot(%normal, "0 0 1");
+				%dot = VectorDot(%normal, %upVector);
 				%ang = mRadToDeg(mAcos(%dot));
 
 				if(%ang <= %db.hoverRecoverAngle)
@@ -153,6 +196,12 @@ function FlyingVehicle::hoverLoop(%obj)
 					%force = %db.hoverRecoverForce * %tick;
 
 					%obj.applyImpulse(%pos, vectorScale(%normal, %force));
+
+					if(%isGrav)
+					{
+						%upVector = normalFromRaycast(%ray);
+						%obj.lastGroundVector = %upVector;
+					}
 				}
 			}
 		}
