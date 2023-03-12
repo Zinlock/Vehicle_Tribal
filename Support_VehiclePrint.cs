@@ -82,6 +82,20 @@ function comp2hex( %comp )
     return %left @ %comp;
 }
 
+function getBar(%char, %bars, %colorFill, %color, %at)
+{
+	%str = "<color:" @ %colorFill @ ">";
+	for(%i = 0; %i < %bars; %i++)
+	{
+		if(%i == mCeil(%at * %bars))
+			%str = %str @ "<color:" @ %color @ ">";
+
+		%str = %str @ %char;
+	}
+
+	return %str;
+}
+
 function AIPlayer::vehiclePrintLoop(%pl, %node) {}
 
 function Player::vehiclePrintLoop(%pl, %node)
@@ -113,7 +127,7 @@ function Player::vehiclePrintLoop(%pl, %node)
 
 	%hcol = rgb2hex(RGBLerp(%hcolMax, %hcolMin, %hp));
 
-	%str = "<color:FFFFFF><font:arial bold:16><spush><spush>HULL <color:" @ %hcol @ "><font:arial:16>" @ mCeil(%hp * 100) @ "%<just:right><color:44FF44>" @ mFloor(vectorLen(%obj.getVelocity())) @ "u/s <spop>SPD<br>";
+	%str = "<color:FFFFFF><font:arial bold:16><spush><spush>HULL <color:" @ %hcol @ "><font:arial:16>" @ mCeil(%hp * 100) @ "% <spush><font:arial:14>[" @ getBar("|", 80, %hcol, "444444", %hp) @ "<color:" @ %hcol @ ">]<spop>";
 
 	if(%db.useEnergyPrints)
 	{
@@ -124,13 +138,15 @@ function Player::vehiclePrintLoop(%pl, %node)
 
 		%ecol = rgb2hex(RGBLerp(%ecolMax, %ecolMin, %erg));
 
-		%estr = "<just:left>ERG <color:" @ %ecol @ "><font:arial:16>" @ mCeil(%erg * 100) @ "%";
+		%str = %str @ "<just:right><color:" @ %ecol @ "><spush><font:arial:14>[" @ getBar("|", 80, "444444", %ecol, 1 - %erg) @ "<color:" @ %ecol @ ">]<spop> <font:arial:16>" @ mCeil(%erg * 100) @ "% <spop>ERG";
 	}
+
+	%str = %str @ "<br><spop><just:left>SPD <color:44FF44><font:arial:16>" @ mFloor(vectorLen(%obj.getVelocity())) @ "u/s";
 	
 	if(%obj.useExtraPrints)
-		%hstr = "<just:right><color:" @ stripMLControlChars(%obj.extraPrintColor) @ "><font:arial:16>" @ stripMLControlChars(%obj.extraPrintText) @ " <spop>" @ stripMLControlChars(%obj.extraPrintLabel);
+		%str = %str @ "<just:right><color:" @ stripMLControlChars(%obj.extraPrintColor) @ "><font:arial:16>" @ %obj.extraPrintText @ " <spop>" @ stripMLControlChars(%obj.extraPrintLabel);
 
-	commandToClient(%cl, 'bottomPrint', %str @ %estr @ %hstr, 1, 1);
+	%cl.longBottomPrint(%str, 1, 1);
 
 	%pl.vehiclePrint = %pl.schedule(100, vehiclePrintLoop, %node);
 }

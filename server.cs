@@ -23,6 +23,14 @@ function tv(%td)
 //   x Havoc Transport
 //   o Vehicle Pad
 
+function GameConnection::longBottomPrint(%cl, %str, %time, %hide)
+{
+	if(strlen(%str) < 240)
+		commandToClient(%cl, 'bottomPrint', %str, %time, %hide);
+	else
+		commandToClient(%cl, 'bottomPrint', '%3%4%5%6%7', %time, %hide, getSubStr(%str, 0, 240), getSubStr(%str, 240, 240), getSubStr(%str, 480, 240), getSubStr(%str, 720, 240), getSubStr(%str, 960, 240));
+}
+
 exec("./common.cs");
 exec("./Support_HoverVehicles.cs");
 exec("./Support_VehicleEffects.cs");
