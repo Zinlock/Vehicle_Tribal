@@ -57,6 +57,14 @@ package T2VehicleEffects
 };
 activatePackage(T2VehicleEffects);
 
+function FlyingVehicle::onEngineLowSpeed(%db, %obj) { }
+function FlyingVehicle::onEngineMedSpeed(%db, %obj) { }
+function FlyingVehicle::onEngineHighSpeed(%db, %obj) { }
+
+function WheeledVehicle::onEngineLowSpeed(%db, %obj) { }
+function WheeledVehicle::onEngineMedSpeed(%db, %obj) { }
+function WheeledVehicle::onEngineHighSpeed(%db, %obj) { }
+
 function FlyingVehicle::engineLoop(%obj) { WheeledVehicle::engineLoop(%obj); }
 
 function WheeledVehicle::engineLoop(%obj)
