@@ -82,7 +82,7 @@ datablock FlyingVehicleData(T2HavocVehicle : T2WildcatVehicle)
 	engineSlot = 1;
 	engineIdleSound = T2HavocIdleSound;
 	engineMoveSound = T2HavocEngineSound;
-	engineMoveSpeed = 30;
+	engineMoveSpeed = 40;
 	engineBoostSound = T2HavocEngineSound;
 	engineBoostSpeed = 120;
 	
@@ -94,20 +94,35 @@ datablock FlyingVehicleData(T2HavocVehicle : T2WildcatVehicle)
 	autoAngularForce = 500;
 	autoLinearForce = 60;
 
-	steeringForce = 1000;
+	steeringForce = 1500;
 	steeringRollForce = 100;
 	
-	maneuveringForce = 5000;
+	maneuveringForce = 4000;
 	horizontalSurfaceForce = 200;
 	verticalSurfaceForce = 200;
 
-	hoverHeight = 5;
-	createHoverHeight = 3;
+	hoverHeight = 7;
+	createHoverHeight = 4;
 	vertThrustMultiple = 100;
 
 	rideable = 1;
 
 	isHoverVehicle = false;
+
+	hoverBrakes = true;
+	flyingHover = true;
+
+	minHoverDist = 10;
+	maxHoverSpeed = 10;
+	hoverDownForce = 50;
+
+	boostEnergyDrain = 15 / 31.25;
+	minBoostEnergy = 2;
+	
+	maxBoostUpSpeed = 20;
+	boostUpForce = 200;
+	maxBoostSpeed = 60;
+	boostForce = 150;
 
 	uiName = "T2: Havoc Armored Transport";
 };
