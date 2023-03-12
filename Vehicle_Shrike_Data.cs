@@ -80,7 +80,7 @@ datablock ExplosionData(T2ShrikeBlasterExplosion : gunExplosion)
 	particleRadius = 0.0;
 
 	damageRadius = 3;
-	radiusDamage = 20;
+	radiusDamage = 15;
 };
 
 datablock ProjectileData(T2ShrikeBlasterProjectile)
@@ -147,7 +147,7 @@ datablock ShapeBaseImageData(T2ShrikeBlasterAImage)
 	tracerSize = 3; // negative value flips the tracer
 	tracerData = T2ShrikeBlasterTracer;
 
-	energyDrain = 4;
+	energyDrain = 2;
 	minEnergy = 8;
 
 	stateName[0]                    = "Ready";
@@ -160,13 +160,13 @@ datablock ShapeBaseImageData(T2ShrikeBlasterAImage)
 	stateSequence[1]                = "fire";
 	stateTransitionOnTimeout[1]     = "Delay";
 	stateWaitForTimeout[1]          = True;
-	stateTimeoutValue[1]            = 0.15;
+	stateTimeoutValue[1]            = 0.1;
 	stateScript[1]                  = "onFire";
 
 	stateName[2]                    = "Delay";
 	stateTransitionOnTimeout[2]     = "Ready";
 	stateWaitForTimeout[2]          = True;
-	stateTimeoutValue[2]            = 0.3;
+	stateTimeoutValue[2]            = 0.1;
 	stateScript[2]                  = "onDelay";
 
 	stateName[3]                    = "AmmoCheck";

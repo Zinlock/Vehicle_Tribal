@@ -74,33 +74,46 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	engineSlot = 1;
 	engineIdleSound = T2ShrikeIdleSound;
 	engineMoveSound = T2ShrikeEngineSound;
-	engineMoveSpeed = 60;
+	engineMoveSpeed = 75;
 	engineBoostSound = T2ShrikeEngineSound;
 	engineBoostSpeed = 120;
 
-	rollForce		= -10;
+	rollForce		= -5;
 	rotationalDrag		= 12;
 
 	maxAutoSpeed = 300;
 	autoInputDamping = 0.98;
 	autoAngularForce = 500;
-	autoLinearForce = 60;
+	autoLinearForce = 100;
 
-	steeringForce = 1000;
+	steeringForce = 1500;
 	steeringRollForce = 100;
 	
-	maneuveringForce = 10000;
+	maneuveringForce = 9000;
 	horizontalSurfaceForce = 200;
 	verticalSurfaceForce = 200;
 
-	hoverHeight = 5;
-	createHoverHeight = 3;
-
-	vertThrustMultiple = 1;
+	hoverHeight = 6;
+	createHoverHeight = 4;
 
 	rideable = 1;
 
 	isHoverVehicle = false;
+
+	hoverBrakes = true; // used here as boost
+	flyingHover = true;
+
+	minHoverDist = 10;
+	maxHoverSpeed = 15;
+	hoverDownForce = 50;
+
+	boostEnergyDrain = 25 / 31.25;
+	minBoostEnergy = 10;
+	
+	maxBoostUpSpeed = 30;
+	boostUpForce = 400;
+	maxBoostSpeed = 90;
+	boostForce = 500;
 
 	uiName = "T2: Shrike Scout Flier";
 };

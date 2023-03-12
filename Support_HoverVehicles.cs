@@ -14,10 +14,18 @@ package T2HoverVehicles
 	{
 		Parent::onAdd(%db, %obj);
 
-		if(isObject(%obj) && %db.isHoverVehicle)
+		if(isObject(%obj))
 		{
-			%obj.lastHover = getSimTime();
-			%obj.hoverLoop();
+			if(%db.isHoverVehicle)
+			{
+				%obj.lastHover = getSimTime();
+				%obj.hoverLoop();
+			}
+			else if(%db.flyingHover)
+			{
+				%obj.lastHover = getSimTime();
+				%obj.altHoverLoop();
+			}
 		}
 	}
 
@@ -36,6 +44,70 @@ function mFloatLerp(%from, %to, %at) // if you use this, to and from are flipped
 	return %to + %at * (%from - %to);
 }
 
+function FlyingVehicle::onUpBoost(%db, %obj, %val) { }
+function FlyingVehicle::onBoost(%db, %obj, %val) { }
+
+function FlyingVehicle::altHoverLoop(%obj) // used for actual flying vehicles, not compatible with the other hover system
+{
+	cancel(%obj.hover);
+	
+	%db = %obj.getDataBlock();
+
+	%vel = %obj.getVelocity();
+	%pos = vectorAdd(%obj.getPosition(), vectorScale(%obj.getUpVector(), getWord(%db.massCenter, 2)));
+	%end = VectorAdd(%pos, vectorScale("0 0 -1", %db.minHoverDist));
+
+	if(%vel $= "0 0 0")
+		%obj.setVelocity("0 0 0.1");
+
+	%ray = containerRayCast(%pos, %end, $HoverMask);
+
+	%hit = false;
+
+	if(isObject(%ray))
+		%hit = true;
+
+	%tick = (getSimTime() - %obj.lastHover) / 32;
+
+	if(!%obj.hoverBrake)
+	{
+		if(vectorLen(%vel) <= %db.maxHoverSpeed && !%hit)
+		{
+			%force = %db.hoverDownForce * %tick;
+
+			%obj.applyImpulse(%pos, "0 0 " @ (-%force));
+		}
+	}
+	else // flying vehicles use the brake key as boost
+	{
+		%drain = %db.boostEnergyDrain * %tick;
+
+		if(%obj.getEnergyLevel() >= %db.minBoostEnergy)
+		{
+			if(getSimTime() - %obj.lastHoverEmpty > 100)
+			{
+				if(vectorLen(%vel) <= %db.maxBoostUpSpeed)
+				{
+					%force = %db.boostUpForce * %tick;
+					%obj.applyImpulse(%pos, vectorScale(%obj.getUpVector(), %force));
+				}
+				else if(vectorLen(%vel) <= %db.maxBoostSpeed)
+				{
+					%force = %db.boostForce * %tick;
+					%obj.applyImpulse(%pos, vectorScale(%obj.getForwardVector(), %force));
+				}
+			}
+			else %obj.lastHoverEmpty = getSimTime();
+
+			%obj.setEnergyLevel(%obj.getEnergyLevel() - %drain);
+		}
+		else %obj.lastHoverEmpty = getSimTime();
+	}
+	
+	%obj.lastHover = getSimTime();
+	%obj.hover = %obj.schedule(50, altHoverLoop);
+}
+
 function FlyingVehicle::hoverLoop(%obj)
 {
 	cancel(%obj.hover);
@@ -47,8 +119,13 @@ function FlyingVehicle::hoverLoop(%obj)
 
 	%isGrav = %db.isAntiGrav;
 
-	if(%obj.lastGroundVector $= "")
-		%obj.lastGroundVector = vectorScale(vectorNormalize(%db.defaultGravity), -1);
+	if(%isGrav)
+	{
+		if(%obj.lastGroundVector $= "")
+			%obj.lastGroundVector = vectorScale(vectorNormalize(%db.defaultGravity), -1);
+	}
+	else if(%obj.lastGroundVector $= "")
+		%obj.lastGroundVector = "0 0 1";
 
 	%vel = %obj.getVelocity();
 	%xyvel = setWord(%vel, 2, 0);
@@ -63,9 +140,7 @@ function FlyingVehicle::hoverLoop(%obj)
 	%hit = %end;
 
 	if(isObject(%ray))
-	{
 		%hit = posFromRaycast(%ray);
-	}
 	
 	%dist = VectorDist(%pos, %hit);
 	%sub = vectorSub(%hit, %pos);
