@@ -18,7 +18,7 @@ function tv(%td)
 //   x Wildcat Gravcycle
 //   x Beowulf Tank
 //   x Shrike Scout
-//   o Thundersword Bomber
+//   x Thundersword Bomber
 //   o Jericho MPB
 //   x Havoc Transport
 //   o Vehicle Pad
@@ -45,5 +45,5 @@ exec("./Vehicle_Wildcat_Grav.cs");
 exec("./Vehicle_Shrike.cs");
 exec("./Vehicle_Beowulf.cs");
 exec("./Vehicle_Havoc.cs");
-// exec("./Vehicle_Thundersword.cs");  // todo
+exec("./Vehicle_Thundersword.cs");
 // exec("./Vehicle_Jericho.cs");       // todo (requires Weapon_Turrets)
