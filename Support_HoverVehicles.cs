@@ -8,6 +8,9 @@ if(!isFunction(FlyingVehicleData, onAdd))
 if(!isFunction(FlyingVehicleData, onTrigger))
 	eval("function FlyingVehicleData::onTrigger(%db, %obj, %trig, %val) { }");
 
+if(!isFunction(Armor, onUnMount))
+	eval("function Armor::onUnMount(%db, %pl, %col, %node) { }");
+
 package T2HoverVehicles
 {
 	function FlyingVehicleData::onAdd(%db, %obj)
@@ -35,6 +38,14 @@ package T2HoverVehicles
 
 		if(%trig == 2 && %db.hoverBrakes)
 			%obj.hoverBrake = %val;
+	}
+	
+	function Armor::onUnMount(%db, %pl, %col, %node)
+	{
+		Parent::onUnMount(%db, %pl, %col, %node);
+
+		if(%node == 0)
+			%col.hoverBrake = false;
 	}
 };
 schedule(0, 0, activatePackage, T2HoverVehicles); // for some reason the onTrigger function never gets called unless the package activation is delayed
