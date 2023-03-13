@@ -503,6 +503,8 @@ datablock DebrisData(T2BeowulfFinalExplosionDebrisF : T2BeowulfFinalExplosionDeb
 
 datablock ExplosionData(T2BeowulfFinalExplosionF : T2BeowulfFinalExplosionE)
 {
+	subExplosion[0] = T2BeowulfFinalExplosionE;
+
 	debris = T2BeowulfFinalExplosionDebrisF;
 	debrisNum = 1;
 };
@@ -549,7 +551,7 @@ datablock ExplosionData(T2BeowulfFinalExplosionB : T2BeowulfFinalExplosionE)
 	debrisNum = 2;
 
 	subExplosion[0] = T2BeowulfFinalExplosionD;
-	subExplosion[1] = T2BeowulfFinalExplosionE;
+	subExplosion[1] = T2BeowulfFinalExplosionF;
 };
 
 datablock DebrisData(T2BeowulfFinalExplosionDebrisA : T2BeowulfFinalExplosionDebrisE)

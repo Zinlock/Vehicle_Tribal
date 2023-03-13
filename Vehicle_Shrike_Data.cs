@@ -340,6 +340,8 @@ datablock DebrisData(T2ShrikeFinalExplosionDebrisF : T2ShrikeFinalExplosionDebri
 
 datablock ExplosionData(T2ShrikeFinalExplosionF : T2ShrikeFinalExplosionE)
 {
+	subExplosion[0] = T2ShrikeFinalExplosionE;
+
 	debris = T2ShrikeFinalExplosionDebrisF;
 	debrisNum = 1;
 };
@@ -386,7 +388,7 @@ datablock ExplosionData(T2ShrikeFinalExplosionB : T2ShrikeFinalExplosionE)
 	debrisNum = 2;
 
 	subExplosion[0] = T2ShrikeFinalExplosionD;
-	subExplosion[1] = T2ShrikeFinalExplosionE;
+	subExplosion[1] = T2ShrikeFinalExplosionF;
 };
 
 datablock DebrisData(T2ShrikeFinalExplosionDebrisA : T2ShrikeFinalExplosionDebrisE)

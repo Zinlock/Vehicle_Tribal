@@ -169,6 +169,8 @@ datablock DebrisData(T2HavocFinalExplosionDebrisF : T2HavocFinalExplosionDebrisE
 
 datablock ExplosionData(T2HavocFinalExplosionF : T2HavocFinalExplosionE)
 {
+	subExplosion[0] = T2HavocFinalExplosionE;
+
 	debris = T2HavocFinalExplosionDebrisF;
 	debrisNum = 1;
 };
@@ -215,7 +217,7 @@ datablock ExplosionData(T2HavocFinalExplosionB : T2HavocFinalExplosionE)
 	debrisNum = 2;
 
 	subExplosion[0] = T2HavocFinalExplosionD;
-	subExplosion[1] = T2HavocFinalExplosionE;
+	subExplosion[1] = T2HavocFinalExplosionF;
 };
 
 datablock DebrisData(T2HavocFinalExplosionDebrisA : T2HavocFinalExplosionDebrisE)
