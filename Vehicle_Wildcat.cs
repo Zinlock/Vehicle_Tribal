@@ -141,7 +141,7 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	steeringForce = 4500;
 	steeringRollForce = 500;
 	
-	maneuveringForce = 5000;
+	maneuveringForce = 5500;
 	horizontalSurfaceForce = 20;
 	verticalSurfaceForce = 200;
 
