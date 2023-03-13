@@ -31,6 +31,7 @@ function GameConnection::longBottomPrint(%cl, %str, %time, %hide)
 		commandToClient(%cl, 'bottomPrint', '%3%4%5%6%7', %time, %hide, getSubStr(%str, 0, 240), getSubStr(%str, 240, 240), getSubStr(%str, 480, 240), getSubStr(%str, 720, 240), getSubStr(%str, 960, 240));
 }
 
+exec("./ballistics.cs");
 exec("./common.cs");
 exec("./Support_HoverVehicles.cs");
 exec("./Support_VehicleEffects.cs");

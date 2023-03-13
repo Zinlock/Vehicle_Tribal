@@ -10,7 +10,7 @@ datablock PlayerData(T2ThunderswordHead : TankTurretPlayer)
 	boundingBox = vectorScale("2 2 1", 4);
 
 	minLookAngle = 0;
-	maxLookAngle = $pi/3;
+	maxLookAngle = $pi;
 
 	useEyePoint = true;
 	firstPersonOnly = true;
@@ -33,7 +33,7 @@ datablock PlayerData(T2ThunderswordHead : TankTurretPlayer)
 
 function T2ThunderswordHead::onGunMount(%db, %obj, %pl)
 {
-	%obj.playAudio(2, T2BeowulfActivateSound);
+	%obj.playAudio(2, T2ThunderswordActivateSound);
 }
 
 function T2ThunderswordHead::onGunUnMount(%db, %obj, %pl)
@@ -45,6 +45,11 @@ function T2ThunderswordHead::onGunUnMount(%db, %obj, %pl)
 function T2ThunderswordHead::onGunEquip(%db, %obj, %pl, %old, %new)
 {
 	%obj.setImageLoaded(%db.gunTriggerSlot[%old], true);
+
+	if(%new == 1)
+		%obj.bombing = true;
+	else
+		%obj.bombing = false;
 }
 
 function T2ThunderswordHead::onGunTrigger(%db, %obj, %pl, %val)
@@ -102,6 +107,9 @@ datablock FlyingVehicleData(T2ThunderswordVehicle : T2WildcatVehicle)
 	blockImages[0] = true;
 	mountThread[1] = "sit";
 	mountThread[2] = "root";
+	mountToNearest = true;
+	overridePrevSeat = true;
+	overrideNextSeat = true;
 	
 	numTurretHeads = 1;
 	turretHeadData[0] = T2ThunderswordHead;
@@ -147,10 +155,10 @@ datablock FlyingVehicleData(T2ThunderswordVehicle : T2WildcatVehicle)
 	autoAngularForce = 500;
 	autoLinearForce = 100;
 
-	steeringForce = 1500;
+	steeringForce = 1000;
 	steeringRollForce = 100;
 	
-	maneuveringForce = 9000;
+	maneuveringForce = 8000;
 	horizontalSurfaceForce = 200;
 	verticalSurfaceForce = 200;
 
@@ -182,14 +190,17 @@ datablock FlyingVehicleData(T2ThunderswordVehicle : T2WildcatVehicle)
 function T2ThunderswordVehicle::onEngineLowSpeed(%db, %obj)
 {
 	%obj.unMountImage(2);
+	%obj.unMountImage(3);
 }
 
 function T2ThunderswordVehicle::onEngineMedSpeed(%db, %obj)
 {
 	%obj.mountImage(T2ThunderswordJetImage, 2);
+	%obj.mountImage(T2ThunderswordJet2Image, 3);
 }
 
 function T2ThunderswordVehicle::onEngineHighSpeed(%db, %obj)
 {
 	%obj.mountImage(T2ThunderswordJetImage, 2);
+	%obj.mountImage(T2ThunderswordJet2Image, 3);
 }
