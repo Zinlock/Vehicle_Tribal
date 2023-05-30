@@ -22,7 +22,7 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	maxDamage = 250.00;
 	destroyedLevel = 250.00;
 	
-	rechargeRate = 7.5 / 31.25;
+	rechargeRate = 10 / 31.25;
 	maxEnergy = 150;
 	energyShield = 1.0;
 	energyScale = 5;
@@ -107,11 +107,11 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	maxHoverSpeed = 15;
 	hoverDownForce = 50;
 
-	boostEnergyDrain = 25 / 31.25;
+	boostEnergyDrain = 20 / 31.25;
 	minBoostEnergy = 10;
 	
 	maxBoostUpSpeed = 40;
-	boostUpForce = 400;
+	boostUpForce = 1000;
 	maxBoostSpeed = 130;
 	boostForce = 500;
 

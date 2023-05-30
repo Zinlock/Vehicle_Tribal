@@ -241,7 +241,7 @@ datablock ProjectileData(T2ThunderswordBlasterProjectile : T2ShrikeBlasterProjec
 {
 	projectileShapeName = "./dts/thundersword_projectile.dts";
 
-	directDamage = 5;
+	directDamage = 10;
 
 	explosion = T2ThunderswordBlasterExplosion;
 	particleEmitter     = T2ThunderswordBlasterTrailEmitter;
@@ -264,7 +264,7 @@ datablock ShapeBaseImageData(T2ThunderswordBlasterImage)
 
 	fireSound = T2ThunderswordFireSound;
 
-	energyDrain = 4;
+	energyDrain = 6;
 	minEnergy = 16;
 
 	stateName[0]                    = "Ready";
@@ -279,14 +279,14 @@ datablock ShapeBaseImageData(T2ThunderswordBlasterImage)
 	stateSequence[1]                = "fireR";
 	stateTransitionOnTimeout[1]     = "FireB";
 	stateWaitForTimeout[1]          = True;
-	stateTimeoutValue[1]            = 0.1;
+	stateTimeoutValue[1]            = 0.2;
 	stateScript[1]                  = "onFireA";
 	
 	stateName[5]                    = "FireB";
 	stateSequence[5]                = "fireL";
 	stateTransitionOnTimeout[5]     = "Delay";
 	stateWaitForTimeout[5]          = True;
-	stateTimeoutValue[5]            = 0.1;
+	stateTimeoutValue[5]            = 0.2;
 	stateScript[5]                  = "onFireB";
 
 	stateName[2]                    = "Delay";

@@ -23,6 +23,14 @@ function tv(%td)
 //   x Havoc Transport
 //   o Vehicle Pad
 
+function GameConnection::longCenterPrint(%cl, %str, %time)
+{
+	if(strlen(%str) < 240)
+		commandToClient(%cl, 'centerPrint', %str, %time);
+	else
+		commandToClient(%cl, 'centerPrint', '%3%4%5%6%7', %time, getSubStr(%str, 0, 240), getSubStr(%str, 240, 240), getSubStr(%str, 480, 240), getSubStr(%str, 720, 240), getSubStr(%str, 960, 240));
+}
+
 function GameConnection::longBottomPrint(%cl, %str, %time, %hide)
 {
 	if(strlen(%str) < 240)
@@ -47,4 +55,11 @@ exec("./Vehicle_Shrike.cs");
 exec("./Vehicle_Beowulf.cs");
 exec("./Vehicle_Havoc.cs");
 exec("./Vehicle_Thundersword.cs");
-// exec("./Vehicle_Jericho.cs");       // todo (requires Weapon_Turrets)
+
+if($AddOn__Weapon_Turrets && isFile("Add-Ons/Weapon_Turrets/server.cs"))
+{
+	forceRequiredAddon("Weapon_Turrets");
+
+	exec("./Vehicle_Pad.cs");
+	// exec("./Vehicle_Jericho.cs");       // todo 
+}
