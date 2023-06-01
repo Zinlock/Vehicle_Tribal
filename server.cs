@@ -28,7 +28,7 @@ function GameConnection::longCenterPrint(%cl, %str, %time)
 	if(strlen(%str) < 240)
 		commandToClient(%cl, 'centerPrint', %str, %time);
 	else
-		commandToClient(%cl, 'centerPrint', '%3%4%5%6%7', %time, getSubStr(%str, 0, 240), getSubStr(%str, 240, 240), getSubStr(%str, 480, 240), getSubStr(%str, 720, 240), getSubStr(%str, 960, 240));
+		commandToClient(%cl, 'centerPrint', '%2%3%4%5%6', %time, getSubStr(%str, 0, 240), getSubStr(%str, 240, 240), getSubStr(%str, 480, 240), getSubStr(%str, 720, 240), getSubStr(%str, 960, 240));
 }
 
 function GameConnection::longBottomPrint(%cl, %str, %time, %hide)
