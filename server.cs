@@ -21,7 +21,7 @@ function tv(%td)
 //   x Thundersword Bomber
 //   o Jericho MPB
 //   x Havoc Transport
-//   o Vehicle Pad
+//   x Vehicle Pad
 
 function GameConnection::longCenterPrint(%cl, %str, %time)
 {
@@ -60,6 +60,7 @@ if($AddOn__Weapon_Turrets && isFile("Add-Ons/Weapon_Turrets/server.cs"))
 {
 	forceRequiredAddon("Weapon_Turrets");
 
+	exec("./Support_BrickShiftMenu.cs");
 	exec("./Vehicle_Pad.cs");
 	// exec("./Vehicle_Jericho.cs");       // todo 
 }
