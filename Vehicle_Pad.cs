@@ -624,7 +624,7 @@ function AIPlayer::twVehSUse(%obj, %pl)
 		%obj.stationUser = %pl;
 		%obj.stationInUse = true;
 		%pl.usingStation = %obj;
-		%pl.setTransform(%obj.getPosition());
+		%pl.setTransform(vectorAdd(%obj.getPosition(), "0 0 0.1"));
 		%pl.setVelocity("0 0 0");
 		serverPlay3D(Station_VehicleOnSound, %obj.getPosition());
 
