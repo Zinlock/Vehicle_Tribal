@@ -469,7 +469,7 @@ function Station_VehicleSpawnerPlaceholder::onAdd(%db, %obj)
 {
 	Parent::onAdd(%db, %obj);
 
-	%obj.schedule(100, twVehSCreatePad);
+	%obj.schedule(0, twVehSCreatePad);
 }
 
 function Station_VehicleSpawnerPlaceholder::onRemove(%db, %obj)
