@@ -503,10 +503,17 @@ datablock PlayerData(Station_VehiclePad : Turret_TribalBaseStand) // root use
 	disabledLevel = 1.0;
 
 	shapeFile = "./dts/vehicle_pad.dts";
+	
+	rechargeRate = 5 / 31.25;
+	maxEnergy = 100;
+	energyShield = 1.0;
+	energyShape = Turret_EnergyShieldShape;
+	energyScale = 1.0;
+	energyDelay = 2;
+	energySound = Turret_ShieldDamagedSound;
+	energyBreakSound = Turret_ShieldDestroyedSound;
 
-	maxDamage = 999999;
-
-	energyShield = 0;
+	maxDamage = 200;
 	
 	enterCooldown = 3000;
 	minExitTime = 1000;
@@ -525,7 +532,7 @@ datablock PlayerData(Station_VehiclePad : Turret_TribalBaseStand) // root use
 
 function Station_VehiclePad::turretOnPowerLost(%db, %obj)
 {
-	%pl.twVehSReset();
+	%obj.twVehSReset();
 	Turret_TribalBaseGenerator::turretOnPowerLost(%db, %obj);
 }
 
@@ -536,13 +543,13 @@ function Station_VehiclePad::turretOnPowerRestored(%db, %obj)
 
 function Station_VehiclePad::turretOnDisabled(%db, %obj, %src)
 {
-	%pl.twVehSReset();
+	%obj.twVehSReset();
 	Turret_TribalBaseGenerator::turretOnDisabled(%db, %obj, %src);
 }
 
 function Station_VehiclePad::turretOnDestroyed(%db, %obj, %src)
 {
-	%pl.twVehSReset();
+	%obj.twVehSReset();
 	Turret_TribalBaseGenerator::turretOnDestroyed(%db, %obj, %src);
 }
 
