@@ -29,6 +29,8 @@ datablock PlayerData(T2ThunderswordHead : TankTurretPlayer)
 	gunImage[1, 1] = T2ThunderswordBomberImage;
 	gunItem[1] = rocketLauncherItem;
 	gunTriggerSlot[1] = 1;
+
+	uiName = "";
 };
 
 function T2ThunderswordHead::onGunMount(%db, %obj, %pl)

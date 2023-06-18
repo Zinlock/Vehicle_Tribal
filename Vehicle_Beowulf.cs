@@ -29,6 +29,8 @@ datablock PlayerData(T2BeowulfHead : TankTurretPlayer)
 	gunImage[1, 1] = T2BeowulfGunImage;
 	gunItem[1] = gunItem;
 	gunTriggerSlot[1] = 1;
+	
+	uiName = "";
 };
 
 function T2BeowulfHead::onGunMount(%db, %obj, %pl)
