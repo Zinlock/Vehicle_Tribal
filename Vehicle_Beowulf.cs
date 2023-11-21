@@ -155,8 +155,8 @@ datablock FlyingVehicleData(T2BeowulfVehicle : T2WildcatVehicle)
 	steeringRollForce = 500;
 	
 	maneuveringForce = 3000;
-	horizontalSurfaceForce = 20;
-	verticalSurfaceForce = 200;
+	horizontalSurfaceForce = 2.5;
+	verticalSurfaceForce = 2.5;
 
 	hoverHeight = 3;
 	createHoverHeight = 3;

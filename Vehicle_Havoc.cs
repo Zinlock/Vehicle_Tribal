@@ -91,15 +91,15 @@ datablock FlyingVehicleData(T2HavocVehicle : T2WildcatVehicle)
 
 	maxAutoSpeed = 300;
 	autoInputDamping = 0.95;
-	autoAngularForce = 500;
+	autoAngularForce = 300;
 	autoLinearForce = 60;
 
 	steeringForce = 1500;
 	steeringRollForce = 100;
 	
 	maneuveringForce = 4000;
-	horizontalSurfaceForce = 200;
-	verticalSurfaceForce = 200;
+	horizontalSurfaceForce = 30;
+	verticalSurfaceForce = 30;
 
 	hoverHeight = 7;
 	createHoverHeight = 4;

@@ -123,7 +123,7 @@ datablock ParticleEmitterData(T2ThunderswordBombExplosionCloudEmitter)
    ejectionPeriodMS = 1;
    periodVarianceMS = 0;
    lifeTimeMS	   = 90;
-   ejectionVelocity = 24;
+   ejectionVelocity = 30;
    velocityVariance = 5.0;
    ejectionOffset   = 1.0;
    thetaMin         = 89;
@@ -170,7 +170,7 @@ datablock ParticleEmitterData(T2ThunderswordBombExplosionSmokeEmitter)
 {
 	ejectionPeriodMS = 1;
 	periodVarianceMS = 0;
-	ejectionVelocity = 28;
+	ejectionVelocity = 34;
 	velocityVariance = 3.0;
 	ejectionOffset   = 0.0;
 	thetaMin         = 0;
@@ -216,7 +216,7 @@ datablock ParticleEmitterData(T2ThunderswordBombExplosionHazeEmitter)
 {
 	ejectionPeriodMS = 1;
 	periodVarianceMS = 0;
-	ejectionVelocity = 32;
+	ejectionVelocity = 38;
 	velocityVariance = 6.0;
 	ejectionOffset   = 0.4;
 	thetaMin         = 0;
@@ -376,11 +376,11 @@ datablock ExplosionData(T2ThunderswordBombExplosion : T2BeowulfCannonExplosion)
 	emitter[1] = T2VehicleExplosionDustEmitter;
 	emitter[2] = T2ThunderswordBombExplosionHazeEmitter;
 
-	impulseRadius = 20;
+	impulseRadius = 32;
 	radiusImpulse = 1000;
 
-	damageRadius = 18;
-	radiusDamage = 110;
+	damageRadius = 22;
+	radiusDamage = 100;
 };
 
 datablock ProjectileData(T2ThunderswordBombProjectile)

@@ -590,7 +590,7 @@ function RaycastFire(%db, %start, %dir, %spd, %amt, %srcSlot, %srcObj, %srcCli, 
 						$TypeMasks::PlayerObjectType |
 						$TypeMasks::VehicleObjectType |
 						$TypeMasks::TerrainObjectType |
-						$TypeMasks::StaticObjectType;
+						$trapStaticTypemask;
 		%start = vectorAdd(%start, vectorScale(%vel, -%range/1000));
 
 		%dist = vectorDist(%start, %end);

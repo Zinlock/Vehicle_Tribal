@@ -127,7 +127,7 @@ function Player::vehiclePrintLoop(%pl, %node)
 
 	%hcol = rgb2hex(RGBLerp(%hcolMax, %hcolMin, %hp));
 
-	%str = "<color:FFFFFF><font:arial bold:16><spush><spush>HULL <color:" @ %hcol @ "><font:arial:16>" @ mCeil(%hp * 100) @ "% <spush><font:arial:14>[" @ getBar("|", 80, %hcol, "444444", %hp) @ "<color:" @ %hcol @ ">]<spop>";
+	%str = "<color:FFFFFF><font:arial bold:16><spush><spush><spush>HULL <color:" @ %hcol @ "><font:arial:16>" @ mCeil(%hp * 100) @ "% <spush><font:arial:14>[" @ getBar("|", 80, %hcol, "444444", %hp) @ "<color:" @ %hcol @ ">]<spop>";
 
 	if(%db.useEnergyPrints)
 	{

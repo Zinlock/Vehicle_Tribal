@@ -83,15 +83,15 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 
 	maxAutoSpeed = 300;
 	autoInputDamping = 0.98;
-	autoAngularForce = 500;
+	autoAngularForce = 300;
 	autoLinearForce = 100;
 
 	steeringForce = 1500;
 	steeringRollForce = 100;
 	
 	maneuveringForce = 10000;
-	horizontalSurfaceForce = 200;
-	verticalSurfaceForce = 200;
+	horizontalSurfaceForce = 10;
+	verticalSurfaceForce = 10;
 
 	hoverHeight = 6;
 	createHoverHeight = 4;

@@ -16,7 +16,7 @@ datablock PlayerData(T2ThunderswordHead : TankTurretPlayer)
 	firstPersonOnly = true;
 
 	maxEnergy = 100;
-	rechargeRate = 10 / 31.25;
+	rechargeRate = 12.5 / 31.25;
 
 	gunHideInventory = false;
 	gunImageSlots = 2;
@@ -154,15 +154,15 @@ datablock FlyingVehicleData(T2ThunderswordVehicle : T2WildcatVehicle)
 
 	maxAutoSpeed = 300;
 	autoInputDamping = 0.98;
-	autoAngularForce = 500;
+	autoAngularForce = 300;
 	autoLinearForce = 100;
 
 	steeringForce = 1000;
 	steeringRollForce = 100;
 	
 	maneuveringForce = 8000;
-	horizontalSurfaceForce = 200;
-	verticalSurfaceForce = 200;
+	horizontalSurfaceForce = 20;
+	verticalSurfaceForce = 20;
 
 	hoverHeight = 6;
 	createHoverHeight = 4;
