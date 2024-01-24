@@ -105,6 +105,8 @@ datablock FlyingVehicleData(T2HavocVehicle : T2WildcatVehicle)
 	createHoverHeight = 4;
 	vertThrustMultiple = 100;
 
+	protectPassengersRadius = true;
+	
 	rideable = 1;
 
 	isHoverVehicle = false;

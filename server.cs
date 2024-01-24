@@ -14,15 +14,6 @@ function tv(%td)
 		transmitDatablocks();
 }
 
-// todo: 
-//   x Wildcat Gravcycle
-//   x Beowulf Tank
-//   x Shrike Scout
-//   x Thundersword Bomber
-//   o Jericho MPB
-//   x Havoc Transport
-//   x Vehicle Pad
-
 function GameConnection::longCenterPrint(%cl, %str, %time)
 {
 	if(strlen(%str) < 255)
@@ -64,5 +55,5 @@ if($AddOn__Weapon_Turrets == 1 && isFile("Add-Ons/Weapon_Turrets/server.cs"))
 
 	exec("./Support_BrickShiftMenu.cs");
 	exec("./Vehicle_Pad.cs");
-	// exec("./Vehicle_Jericho.cs");       // todo 
+	exec("./Vehicle_Jericho.cs");
 }

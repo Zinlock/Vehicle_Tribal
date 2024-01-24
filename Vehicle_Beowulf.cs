@@ -162,6 +162,8 @@ datablock FlyingVehicleData(T2BeowulfVehicle : T2WildcatVehicle)
 	createHoverHeight = 3;
 	vertThrustMultiple = 0;
 
+	protectPassengersRadius = true;
+	
 	rideable = 1;
 
 	isHoverVehicle = true;

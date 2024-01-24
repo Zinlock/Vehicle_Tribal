@@ -176,6 +176,7 @@ package T2VehicleGuns
 					%isSlot = true;
 					for (%i = 0; %i < %db.nummountpoints; %i += 1)
 					{
+						%max = %db.maxMountDistance[%i];
 						%blockingObj = %obj.getMountNodeObject (%i);
 
 						if (isObject (%blockingObj))
@@ -185,18 +186,24 @@ package T2VehicleGuns
 							
 							if((%nd = vectorDist(%blockingObj.getPosition(), %col.getPosition())) < %dist)
 							{
-								%dist = %nd;
-								%nearest = %blockingObj;
-								%isSlot = false;
+								if(%max <= 0 || %nd < %max)
+								{
+									%dist = %nd;
+									%nearest = %i;
+									%isSlot = true;
+								}
 							}
 							continue;
 						}
 
 						if((%nd = vectorDist(%obj.getSlotTransform(%i), %col.getPosition())) < %dist)
 						{
-							%dist = %nd;
-							%nearest = %i;
-							%isSlot = true;
+							if(%max <= 0 || %nd < %max)
+							{
+								%dist = %nd;
+								%nearest = %i;
+								%isSlot = true;
+							}
 						}
 					}
 

@@ -167,6 +167,8 @@ datablock FlyingVehicleData(T2ThunderswordVehicle : T2WildcatVehicle)
 	hoverHeight = 6;
 	createHoverHeight = 4;
 
+	protectPassengersRadius = true;
+	
 	rideable = 1;
 
 	isHoverVehicle = false;

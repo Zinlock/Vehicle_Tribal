@@ -98,11 +98,11 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	speedDamageScale = 0.010;
 	
 	damageEmitter[0] = T2VehicleDamageEmitter;
-	damageEmitterOffset[0] = "0.0 -0.5 0.5 ";
+	damageEmitterOffset[0] = "0.0 -0.5 0.5";
 	damageLevelTolerance[0] = 0.65;
 
 	damageEmitter[1] = T2VehicleExplosionShrapnelEmitter;
-	damageEmitterOffset[1] = "0.0 -0.5 0.5 ";
+	damageEmitterOffset[1] = "0.0 -0.5 0.5";
 	damageLevelTolerance[1] = 0.998;
 
 	numDmgEmitterAreas = 3; // how does this work??
@@ -148,6 +148,8 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	hoverHeight = 2;
 	createHoverHeight = 2;
 	vertThrustMultiple = 0;
+
+	protectPassengersRadius = true;
 
 	rideable = 1;
 
