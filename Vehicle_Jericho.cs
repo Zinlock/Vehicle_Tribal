@@ -328,6 +328,9 @@ function WheeledVehicle::MPBDeploy(%obj)
 	%turret.schedule(0, setScale, "1 1 1");
 	%turret.turretHead.schedule(0, setScale, "1 1 1");
 	%turret.schedule(0, turretMountImage, "TB: Vulcan");
+
+	if(isFunction(MMGTick))
+		%obj.SetMMGIcon("marker", "Deployed MPB", %obj.spawnBrick.getColorID());
 }
 
 function WheeledVehicle::MPBUndeploy(%obj)
@@ -355,4 +358,15 @@ function WheeledVehicle::MPBUndeploy(%obj)
 
 	%turret.turretJam(8000);
 	%turret.schedule(8000, delete);
+
+	if(isObject(%col = %obj.getMountNodeObject(2)))
+		%obj.unMountObject(%col);
+	
+	if(isFunction(MMGTick))
+		%obj.SetMMGIcon("none", "", 0);
+}
+
+function T2JerichoVehicle::MMGCanScopeTo(%db, %obj, %cl)
+{
+	return turretIsFriendly(%obj, %cl.getControlObject()) == 1;
 }
