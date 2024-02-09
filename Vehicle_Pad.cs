@@ -428,38 +428,35 @@ function AIPlayer::twVehSEffect(%obj)
 		{
 			datablock = GenericEmitterNode;
 			emitter = T2VehiclePadEmitter;
+			position = %pos;
+			rotation = "1 0 0 0";
 			scale = "0 0 0";
 		};
 
-		%node.setTransform(%pos);
 		%node.setColor("1 1 1 1");
-		%node.inspectPostApply();
-
 		%node.schedule(3000, delete);
 		
 		%node = new ParticleEmitterNode()
 		{
 			datablock = GenericEmitterNode;
 			emitter = T2VehiclePadSpinEmitter;
+			position = %pos;
+			rotation = "1 0 0 180";
 			scale = "0 0 0";
 		};
 
-		%node.setTransform(%pos SPC "1 0 0 " @ $pi);
 		%node.setColor("1 1 1 1");
-		%node.inspectPostApply();
-
 		%node.schedule(3000, delete);
 		
 		%node = new ParticleEmitterNode()
 		{
 			datablock = GenericEmitterNode;
 			emitter = T2VehiclePadSmokeEmitter;
+			position = %pos;
 			scale = "0 0 0";
 		};
 
-		%node.setTransform(%pos);
 		%node.setColor("1 1 1 1");
-		%node.inspectPostApply();
 
 		%node.schedule(3000, delete);
 	}
