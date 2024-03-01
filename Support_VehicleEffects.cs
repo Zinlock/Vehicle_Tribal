@@ -55,7 +55,7 @@ package T2VehicleEffects
 		}
 	}
 };
-activatePackage(T2VehicleEffects);
+schedule(0, 0, activatePackage, T2VehicleEffects);
 
 function FlyingVehicleData::onEngineLowSpeed(%db, %obj) { }
 function FlyingVehicleData::onEngineMedSpeed(%db, %obj) { }
