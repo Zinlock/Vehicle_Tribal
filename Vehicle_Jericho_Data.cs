@@ -69,8 +69,8 @@ datablock WheeledVehicleTire(T2JerichoTire)
 datablock WheeledVehicleSpring(T2JerichoSpring) // why cant these fields be put in the tire datablock anyway?
 {
 	length = 1.2; // Suspension travel
-	force = 12000; // Spring force
-	damping = 800; // Spring damping
+	force = 18000; // Spring force
+	damping = 1600; // Spring damping
 	antiSwayForce = 6; // Lateral anti-sway force
 };
 

@@ -191,6 +191,12 @@ datablock FlyingVehicleData(T2ThunderswordVehicle : T2WildcatVehicle)
 	uiName = "T2: Thundersword Bomber";
 };
 
+if($Version $= "20" || $Version $= "21")
+{
+	T2ThunderswordVehicle.horizontalSurfaceForce = 1000;
+	T2ThunderswordVehicle.verticalSurfaceForce = 800;
+}
+
 function T2ThunderswordVehicle::onEngineLowSpeed(%db, %obj)
 {
 	%obj.unMountImage(2);

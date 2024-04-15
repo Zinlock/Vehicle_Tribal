@@ -129,6 +129,12 @@ datablock FlyingVehicleData(T2HavocVehicle : T2WildcatVehicle)
 	uiName = "T2: Havoc Armored Transport";
 };
 
+if($Version $= "20" || $Version $= "21")
+{
+	T2HavocVehicle.horizontalSurfaceForce = 200;
+	T2HavocVehicle.verticalSurfaceForce = 200;
+}
+
 function T2HavocVehicle::onEngineLowSpeed(%db, %obj)
 {
 	%obj.unMountImage(1);

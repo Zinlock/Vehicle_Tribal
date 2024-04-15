@@ -176,7 +176,11 @@ function FlyingVehicle::hoverLoop(%obj)
 			%obj.lastGroundTime = getSimTime();
 			%obj.lastGroundVector = %upVector;
 
-			%obj.addVelocity("0 0 " @ (%tick * mClampF(1 - (VectorDot(%upVector, "0 0 1") + 1) / 2, 0, 1)));
+			// %obj.addVelocity("0 0 " @ (%tick * mClampF(1 - (VectorDot(%upVector, "0 0 1") + 1) / 2, 0, 1)));
+			%angle = mRadToDeg(mAcos(VectorDot(%upVector, "0 0 1")));
+			%down = vectorScale(%upVector, -1);
+			%angMult = ((%angle / 180) + 1) / 2;
+			%obj.addVelocity(vectorAdd(vectorScale(%down, %angMult * %db.antiGravStickForce), "0 0 " @ %angMult * %db.antiGravForce));
 		}
 		else
 		{

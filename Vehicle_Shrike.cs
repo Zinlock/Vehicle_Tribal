@@ -120,6 +120,12 @@ datablock FlyingVehicleData(T2ShrikeVehicle : T2WildcatVehicle)
 	uiName = "T2: Shrike Scout Flier";
 };
 
+if($Version $= "20" || $Version $= "21")
+{
+	T2ShrikeVehicle.horizontalSurfaceForce = 1000;
+	T2ShrikeVehicle.verticalSurfaceForce = 800;
+}
+
 function T2ShrikeVehicle::onGunUnMount(%db, %obj, %pl)
 {
 	%obj.setImageLoaded(0, true);

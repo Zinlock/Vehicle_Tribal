@@ -12,10 +12,12 @@ datablock FlyingVehicleData(T2WildcatGravVehicle : T2WildcatVehicle)
 
 	isAntiGrav = true; // enables anti gravity thingy
 	antiGravDecay = true; // revert back to default gravity if in midair
+	antiGravStickForce = 1.0; // downwards force to apply against surfaces
+	antiGravForce = 1.5; // vertical force to apply against gravity
 	antiGravDecayTime = 1; // grace period before reverting to default gravity
 	antiGravDistance = 16; // max distance to look for a surface
 	defaultGravity = "0 0 -1"; // default gravity direction
-	gravityForce = 50; // force to recenter vehicle with
+	gravityForce = 150; // force to recenter vehicle with
 };
 
 function T2WildcatGravVehicle::onEngineLowSpeed(%db, %obj)

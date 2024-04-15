@@ -1,4 +1,4 @@
-// -- SOUNDS --
+	// -- SOUNDS --
 
 datablock AudioProfile(T2ShrikeIdleSound)
 {

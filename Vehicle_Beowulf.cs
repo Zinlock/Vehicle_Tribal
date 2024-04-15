@@ -194,6 +194,12 @@ datablock FlyingVehicleData(T2BeowulfVehicle : T2WildcatVehicle)
 	uiName = "T2: Beowulf Assault Tank";
 };
 
+if($Version $= "20" || $Version $= "21")
+{
+	T2BeowulfVehicle.horizontalSurfaceForce = 20;
+	T2BeowulfVehicle.verticalSurfaceForce = 200;
+}
+
 function T2BeowulfVehicle::onEngineLowSpeed(%db, %obj)
 {
 	%obj.unMountImage(2);

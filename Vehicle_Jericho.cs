@@ -126,8 +126,8 @@ datablock WheeledVehicleData(T2JerichoVehicle : JeepVehicle)
 
 	numWheels = 6;
 
-	engineTorque = 12000; // Engine power
-	engineBrake = 2000; // Braking when throttle is 0
+	engineTorque = 20000; // Engine power
+	engineBrake = 4000; // Braking when throttle is 0
 	brakeTorque = 50000; // When brakes are applied
 	maxWheelSpeed = 10; // Engine scale by current speed / max speed
 
@@ -264,8 +264,8 @@ function WheeledVehicle::MPBDeployLoop(%obj)
 
 								%obj.mountObject(%col, 2);
 
-								if(isObject(%col.Client) && isObject(Station_InventoryPad))
-									twlApplyLoadout(%col.Client);
+								if(isObject(%cl = %col.Client) && $LOSetCount !$= "")
+									%cl.LOApplyLoadout(true, true);
 
 								%obj.stopAudio(3);
 								%obj.playAudio(3, T2JerichoStationUseSound);

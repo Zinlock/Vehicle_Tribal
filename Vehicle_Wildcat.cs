@@ -185,6 +185,12 @@ datablock FlyingVehicleData(T2WildcatVehicle)
 	uiName = "T2: Wildcat Gravcycle";
 };
 
+if($Version $= "20" || $Version $= "21")
+{
+	T2WildcatVehicle.horizontalSurfaceForce = 20;
+	T2WildcatVehicle.verticalSurfaceForce = 200;
+}
+
 function T2WildcatVehicle::onEngineLowSpeed(%db, %obj)
 {
 	%obj.unMountImage(0);
