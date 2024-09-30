@@ -741,6 +741,8 @@ function Station_VehiclePad::turretOnIdleTick(%db, %pl)
 			}
 		}
 	}
+
+	Parent::turretOnIdleTick(%db, %pl);
 }
 
 function Station_VehiclePad::onAdd(%db, %obj)
