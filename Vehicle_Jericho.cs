@@ -167,7 +167,7 @@ datablock WheeledVehicleData(T2JerichoVehicle : JeepVehicle)
 	mpbHealthRegen = 3;
 	mpbEnergyRegen = 6;
 
-	mpbUseRadius = 1.5;
+	mpbUseRadius = 1;
 	mpbEscapeVelocity = 10;
 };
 
@@ -194,7 +194,6 @@ function WheeledVehicle::MPBDeployLoop(%obj)
 	%db = %obj.getDatablock();
 	cancel(%obj.mdl);
 
-	%vel = vectorLen(%obj.getVelocity());
 	%ctrl = isObject(%obj.getControllingObject());
 
 	if(%ctrl && !%obj.mpbDriven)
@@ -288,7 +287,7 @@ function WheeledVehicle::MPBDeployLoop(%obj)
 		}
 	}
 
-	%obj.mdl = %obj.schedule(100, MPBDeployLoop);
+	%obj.mdl = %obj.schedule(250, MPBDeployLoop);
 }
 
 function WheeledVehicle::MPBDeploy(%obj)
