@@ -515,7 +515,7 @@ datablock PlayerData(Station_VehiclePad : Turret_TribalBaseStand) // root use
 	enterCooldown = 3000;
 	minExitTime = 1000;
 
-	useRadius = 3;
+	useRadius = 4;
 	leaveRadius = 2;
 	escapeVelocity = 10;
 
@@ -749,11 +749,15 @@ function Station_VehiclePad::onAdd(%db, %obj)
 {
 	if(!isObject(%obj.client))
 	{
-		%obj.setNodeColor("ALL", "1 1 1 1");		
+		%obj.setNodeColor("ALL", "1 1 1 1");
 		%obj.playAudio(3, %db.idleSound);
 	}
 
 	Parent::onAdd(%db, %obj);
+
+	%obj.setShapeName("Vehicle Station", 8564862);
+	%obj.setShapeNameDistance(32);
+	%obj.setShapeNameColor("1 1 1");
 }
 
 function Station_VehiclePad::onRemove(%db, %obj)
