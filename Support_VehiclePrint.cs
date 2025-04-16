@@ -96,6 +96,14 @@ function getBar(%char, %bars, %colorFill, %color, %at)
 	return %str;
 }
 
+function GameConnection::longBottomPrint(%cl, %str, %time, %hide)
+{
+	if(strlen(%str) < 255)
+		commandToClient(%cl, 'bottomPrint', %str, %time, %hide);
+	else
+		commandToClient(%cl, 'bottomPrint', '%3%4%5%6%7', %time, %hide, getSubStr(%str, 0, 255), getSubStr(%str, 255, 255), getSubStr(%str, 510, 255), getSubStr(%str, 765, 255), getSubStr(%str, 1020, 255));
+}
+
 function AIPlayer::vehiclePrintLoop(%pl, %node) {}
 
 function Player::vehiclePrintLoop(%pl, %node)
